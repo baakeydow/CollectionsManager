@@ -1,0 +1,242 @@
+/*#####*/
+/*#             miscellaneous*/
+/*#####*/
+
+.form-control {
+    background-color: transparent !important;
+    border: 1px ridge #683c15 !important;
+}
+.centerPunchLine {
+    margin: 40px 0;
+    text-align: center;
+    color:#683c15;
+    font-weight: bold;
+    font-style: italic;
+}
+.buttonAlignRight {
+    margin: 5px 20px;
+    text-align:right;
+}
+.btn-success,
+.btn-success:before,
+.btn-success:after,
+.btn-success:active,
+.btn-success:visited,
+.btn-success {
+    background-color: #314477 !important;
+    border-color: #8a4dda !important;
+}
+.btn-success:hover {
+    background-color: #288fea !important;
+}
+.wrapperOpacity {
+    opacity: 0.8;
+    background-color: black;
+}
+.picture {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    max-height: 80%;
+}
+.pictureInverse {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    max-height: 80%;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+.UpsidDown {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    max-height: 80%;
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+.ContentRightMargin {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 40px 0;
+}
+.ContentCenterMargin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+}
+.ContentCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ContentLeft {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.ContentRight {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.ContentCenter.WelcomePage {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/*#####*/
+/*#             main*/
+/*#####*/
+
+div#app {
+    position: relative;
+}
+.buttonWelcome {
+    background-color: rgb(40, 44, 55);
+    border-color: rgb(40, 44, 55);
+    color:white;
+    pointer-events: none;
+    cursor: default;
+    margin-top: 30px;
+    margin-bottom: 142px;
+}
+.bckg {
+    background:  linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)),url('./images/allegory.png') no-repeat center center fixed;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    position: relative;
+}
+.Customfooter {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: inherit;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background-color: #292d38;
+    height: 46px;
+    padding-top: 40px;
+}
+.Content {
+    margin: 40px 20px 0 20px;
+    text-align: justify;
+    height: 942px;
+    width: auto;
+    position: relative;
+}
+.title > h4,h3 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+/*#####*/
+/*#             collection and items*/
+/*#####*/
+
+.ListAllColl .singleColl .toolbar.ContentCenter .btn-danger {
+    display: none;
+}
+.ListAllColl {
+    display: table-row;
+}
+.singleColl {
+    margin-bottom: 10px;
+    border-style: ridge;
+    padding: 10px;
+}
+.toolbar {
+    color: black;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    border-radius: 4px;
+}
+.toolbar .btn {
+    width: 24px;
+    height: 24px;
+    padding: 0px;
+    font-size: 8px;
+}
+div.ContentLeft.col-sm-6.itemAction {
+    display:none;
+}
+div.ContentRight.col-sm-6.itemList {
+    display:table;
+}
+.ContentLeft.col-xs-12.col-sm-6 {
+    margin-top: 1px;
+}
+.ContentLeft.col-sm-6 {
+    padding-left: 6px;
+}
+.item.list input {
+    margin: 0 17px;
+    width: 100%;
+}
+.itemAction {
+    margin-left: 5px;
+    padding: 0px;
+}
+.ContentLeft.col-sm-6.itemAction .btnMode:hover {
+    background-color: #f1b7b7;
+}
+.addOneColl {
+    width: 225px;
+    margin-bottom: 40px;
+}
+.addOneColl .row {
+    margin-bottom: 20px;
+}
+.addOneItem {
+    margin-top: 20px;
+}
+.addOneItem button {
+    margin: 2px;
+}
+.ContentLeft.col-sm-6 button {
+    font-size: 12px;
+}
+.mappedColl {
+    width: 100%;
+}
+.legend {
+    padding: 5px 20px;
+    display: inline-block;
+}
+.list {
+    margin-bottom: 10px;
+    color:#683c15;
+    font-weight: bold;
+    text-align: start;
+    list-style: none;
+}
+.list li::before {
+    content: "•";
+    color: #683c15;
+}
+.Select .Select-control {
+    background-color: transparent !important;
+    border: 3px solid #683c15 !important;
+}
+@keyframes App-logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
