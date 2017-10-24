@@ -1,0 +1,66 @@
+const express           = require('express');
+const path 				= require('path');
+const DbUserController  = require('../Controllers/user.controller');
+
+const router = express.Router();
+
+router.post('/', (req, res, next) => {
+    DbUserController.LoginRegister(req, res, next)
+    .then((data) => {
+      console.log('auth Success');
+    }).catch((err) => {
+      console.log('auth Error: \n\n', err);
+    })
+});
+router.get('/', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/home', (req, res, next) => {
+    DbUserController.FindUser(req, res, next)
+    .then((data) => {
+      if (data) {
+          console.log('------------------------------');
+          console.log(data);
+          console.log('------------------------------');
+          console.log('auth Success');
+          res.sendFile(path.join(__dirname, '../../Public/index.html'));
+      }
+    }).catch((err) => {
+      console.log('auth Error: \n\n', err);
+      return next(err);
+    })
+});
+router.get('/out', (req, res, next) => {
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function (err) {
+            if (err) {
+                return next(err);
+            } else {
+                console.log('session deleted !');
+                return res.redirect('/');
+            }
+        });
+    } else {
+        console.log('did not log out');
+        return res.redirect('/');
+    }
+});
+router.get('/about', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/contact', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/admin', (req, res, next) => {
+  return next(new Error('Are you this much serious ? well try again you might find some'));
+});
+router.get('/user/*', (req, res, next) => {
+  return next(new Error('ok try again...'));
+});
+
+router.use((err, req, res, next) => {
+  return next(err);
+});
+
+module.exports = router;

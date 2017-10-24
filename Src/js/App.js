@@ -65,16 +65,16 @@ class App extends Component {
         this.props.dispatch(dropOneCollection(data));
     }
 
-    addItem(data, coll) {
-        this.props.dispatch(addItem(data, coll));
+    addItem(data) {
+        this.props.dispatch(addItem(data));
     }
 
-    delItem(coll, id) {
-        this.props.dispatch(delItem(coll, id));
+    delItem(data) {
+        this.props.dispatch(delItem(data));
     }
 
-    updateItem(coll, id, item) {
-        this.props.dispatch(updateItem(coll, id, item));
+    updateItem(data) {
+        this.props.dispatch(updateItem(data));
     }
 
     changeLang() {

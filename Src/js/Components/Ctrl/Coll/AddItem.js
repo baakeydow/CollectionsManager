@@ -7,7 +7,8 @@ class AddItem extends React.Component {
         super(props);
         this.state = {
             form: {
-                name: ''
+                desc: '',
+                url: ''
             }
         };
         this.handleChange = this.handleChange.bind(this);
@@ -18,17 +19,34 @@ class AddItem extends React.Component {
     handleChange(event) {
         this.setState({
             form: {
-                name: event.target.name === 'name' ? event.target.value : this.state.form.name
+                desc: event.target.name === 'desc' ? event.target.value : this.state.form.desc,
+                url: event.target.name === 'url' ? event.target.value : this.state.form.url
             }
         });
         event.preventDefault();
     }
 
     addItem(event) {
-        if (this.state.form.name) {
-            this.props.addOneItem(this.state.form.name, this.props.dbColl);
+        console.log(this.props.dbColl);
+        if (this.state.form.desc && this.state.form.url) {
+            var data = {
+                link: {
+                    url: this.state.form.url,
+                    desc: this.state.form.desc
+                },
+                belongsTo: this.props.dbColl,
+                author: 'doftom',
+                hidden: true,
+                canbetouch: false,
+                meta: {
+                    clicked: 0,
+                    beenUpdated:  false
+                }
+            }
+            this.props.addOneItem(data);
         }
-        this.state.form.name = "";
+        this.state.form.desc = "";
+        this.state.form.url = "";
         event.preventDefault();
         event.stopPropagation();
     }
@@ -47,7 +65,8 @@ class AddItem extends React.Component {
             <form className="addOneItem" onSubmit={this.addItem}>
                 <div className="row">
                     <div className="form-group col-xs-12 ">
-                        <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="https://www.youtube.com/watch?v=I_GlyBbaYws"/>
+                        <input value={this.state.form.desc} onChange={this.handleChange} name="desc" type="text" className="form-control" placeholder="what"/>
+                        <input value={this.state.form.url} onChange={this.handleChange} name="url" type="text" className="form-control" placeholder="https://www.youtube.com/watch?v=I_GlyBbaYws"/>
                     </div>
                 </div>
                 <div className="ContentCenter">

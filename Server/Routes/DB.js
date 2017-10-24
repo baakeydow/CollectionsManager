@@ -1,32 +1,88 @@
 const express = require('express');
-const DbController = require('../Controllers/db.controller');
+const DbLinkController = require('../Controllers/link.controller');
 
 const router = express.Router();
 
 // return a list of all Coll
-router.route('/list').get(DbController.ListAllColl);
+router.route('/list').get((req, res, next) => {
+    DbLinkController.ListAllColl(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
 // Get one Coll by name and list it
-router.route('/getdbcoll').post(DbController.GetOneDbColl);
+router.route('/getdbcoll').post((req, res, next) => {
+    DbLinkController.GetOneDbColl(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
 // Add a new Coll and return a list of all Coll
-router.route('/adddbcoll').post(DbController.AddDbColl);
+router.route('/adddbcoll').post((req, res, next) => {
+    DbLinkController.AddDbColl(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
 // Drop a Coll and return a list of all Coll
-router.route('/dropdbcoll').post(DbController.DropDbColl);
+router.route('/dropdbcoll').post((req, res, next) => {
+    DbLinkController.DropDbColl(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
 // Add item to Coll and list it
-router.route('/additem').post(DbController.AddItem);
+router.route('/additem').post((req, res, next) => {
+    DbLinkController.AddItem(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
 // update
-router.route('/updateitem').post(DbController.UpdateItem);
+router.route('/updateitem').post((req, res, next) => {
+    DbLinkController.UpdateItem(req, res, next)
+    .then((data) => {
+      console.log('success');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
-// Delet item
-router.route('/delitem').post(DbController.DelOneItem);
+// Delete item
+router.route('/delitem').post((req, res, next) => {
+    DbLinkController.DelOneItem(req, res, next)
+    .then((data) => {
+      console.log('success !');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
 
+router.get('/', (req, res, next) => {
+  var err = new Error("you've been locked up");
+  err.status = 451;
+  return next(err);
+});
 
-router.get('/*', function(req, res, next) {
-  res.redirect(301, '/');
+router.get('/*', (req, res, next) => {
+  var err = new Error("Trying to mess with me ?");
+  err.status = err.status || 418;
+  return next(err);
 });
 
 module.exports = router;

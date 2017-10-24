@@ -46,7 +46,7 @@ class AddColl extends React.Component {
                         <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="TechLinks"/>
                     </div>
                 </div>
-                <div className="ContentLeft ">
+                <div className="ContentRight">
                     <button type="submit" className="btn btn-success">ADD</button>
                 </div>
             </form>

@@ -4,14 +4,15 @@ const http 				= require('http');
 const bodyParser 		= require('body-parser');
 const cookieParser		= require('cookie-parser');
 const helmet 			= require('helmet')
-const auth 				= require('http-auth');
+const serveIndex		= require('serve-index');
+const mongoose			= require('mongoose');
 const DB				= require('./Routes/DB');
-// const basic 			= auth.basic({
-// 		realm: "Nope It's Private",
-// 		file: __dirname + "/users.htpasswd"
-// });
+const USER				= require('./Routes/USER');
 
 const app				= express();
+
+var session 			= require('express-session');
+var MongoStore			= require('connect-mongo')(session);
 
 var allowXSS			= (req, res, next) => {
     res.header('Access-Control-Allow-Origin', "*");
@@ -23,21 +24,59 @@ var allowXSS			= (req, res, next) => {
 			next();
 		}
 }
-
+mongoose.Promise = global.Promise;
+// Connect
+mongoose.connect('mongodb://localhost:27017/appDB',{
+	useMongoClient: true
+});
+mongoose.connection.once('open', () => {
+// Connected !
+});
+//use sessions to track logins
+app.use(session({
+  secret: '42',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
+  })
+}));
 app.use(allowXSS);
-// app.use(auth.connect(basic));
 app.use(express.static(path.join(__dirname, '..', 'Public')));
+app.use('/4242', express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
-app.use('/db', DB);
 // app.disable('x-powered-by'); // handled by helmet
 
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'Public', 'index.html'));
+app.use('/', USER);
+
+app.use('/db', DB);
+
+app.get('/*', (req, res, next) => {
+  return next(new Error('Here you get a nice url for yourelf... that\'s soooo random'));
 });
 
+// catch 404 and forward to error handler
+app.use((err, req, res, next) => {
+  err.status = err.status || 404;
+  next(err);
+});
+// error handler
+// define as the last app.use callback
+app.use((err, req, res, next) => {
+  if (!err.status || err.status === 500) {
+	  console.log('ALERT ALERT that\'s a 500 ==========================================');
+	  console.log('====================================================================');
+  }
+  res.status(err.status || 500);
+  res.send(err.message);
+});
+
+
 // Create an HTTP service.
-http.createServer(app).listen(8000);
+http.createServer(app).listen(8000, () => {
+	  console.log('Listening on port 8000\n\n\n\n');
+});

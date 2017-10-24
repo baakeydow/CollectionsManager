@@ -19,20 +19,16 @@ class AllColl extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         var { collections } = this.props;
-        const index = collections.indexOf('system.indexes');
-        if (index !== -1) {
-            collections.splice(index, 1)
-        }
+
         var collectionsList = collections.map((coll, i) =>
             <div className="singleColl" key={i}>
                 <div className="toolbar ContentCenter">
-                    <button className="btn btn-success" onClick={ this.props.selectOneColl.bind(this, coll) }><span>List</span></button>
-                    <li onClick={this.showEditMode.bind(this, coll)} className="legend">&nbsp;{coll}</li>
-                    <button id={coll} className="btn btn-danger" onClick={ this.props.dropOneColl.bind(this, coll) }><span>Drop</span></button>
+                    <button className="btn btn-success" onClick={ this.props.selectOneColl.bind(this, coll.name) }><span>List</span></button>
+                    <li onClick={this.showEditMode.bind(this, coll.name)} className="legend">&nbsp;{coll.name}</li>
+                    <button id={coll.name} className="btn btn-danger" onClick={ this.props.dropOneColl.bind(this, coll.name) }><span>Drop</span></button>
                 </div>
-                <AddItem dbColl={coll} addOneItem={this.props.addItemToColl}/>
+                <AddItem dbColl={coll.name} addOneItem={this.props.addItemToColl}/>
             </div>
         );
         if (!collectionsList.length) {

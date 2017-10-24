@@ -7,11 +7,7 @@ export function fetchAllCollections() {
 
       axios({
         method: 'get',
-        url: url,
-        auth: {
-          username: 'id',
-          password: 'passwd'
-        }
+        url: url
       })
       .then((response) => {
         dispatch({type: "FETCH_COLLECTIONS_FULFILLED", payload: response.data})
@@ -31,11 +27,7 @@ export function fetchOneCollection(collname) {
         method: 'post',
         url: url,
         data: {
-          name: collname
-        },
-        auth: {
-          username: 'id',
-          password: 'passwd'
+          coll: collname
         }
       })
       .then((response) => {
@@ -76,7 +68,7 @@ export function dropOneCollection(collname) {
         method: 'post',
         url: url,
         data: {
-          name: collname
+          coll: collname
         }
       })
       .then((response) => {
@@ -89,7 +81,7 @@ export function dropOneCollection(collname) {
   }
 }
 
-export function addItem(item, coll) {
+export function addItem(item) {
   return function(dispatch) {
     dispatch({type: "ADD_ITEM"});
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/additem/' : '/db/additem/';
@@ -99,8 +91,7 @@ export function addItem(item, coll) {
          method: 'POST',
          url: url,
          data: {
-           item: item,
-           coll: coll
+           item: item
          }
       })
       .then((response) => {
@@ -112,7 +103,7 @@ export function addItem(item, coll) {
       })
   }
 }
-export function delItem(coll, id) {
+export function delItem(item) {
   return function(dispatch) {
     dispatch({type: "DELL_ITEM"});
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/delitem/' : '/db/delitem/';
@@ -122,8 +113,7 @@ export function delItem(coll, id) {
          method: 'POST',
          url: url,
          data: {
-           coll: coll,
-           id: id
+           item: item
          }
       })
       .then((response) => {
@@ -135,7 +125,7 @@ export function delItem(coll, id) {
       })
   }
 }
-export function updateItem(coll, id, modifiedItem) {
+export function updateItem(item) {
   return function(dispatch) {
     dispatch({type: "UPDATE_ITEM"});
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/updateitem/' : '/db/updateitem/';
@@ -145,9 +135,7 @@ export function updateItem(coll, id, modifiedItem) {
          method: 'POST',
          url: url,
          data: {
-           coll: coll,
-           id: id,
-           item: modifiedItem
+           item: item
          }
       })
       .then((response) => {

@@ -1,9 +1,34 @@
+import axios from "axios";
+
+var initUser = function() {
+    var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/' : '/';
+    axios({
+      method: 'post',
+      url: url,
+      data: {
+        // email: 'oy',
+        // username: 'oy',
+        // password: '1234',
+        // passwordConf: '1234'
+        logemail: 'oy',
+        logpassword: '1234'
+      }
+    })
+    .then((response) => {
+        console.log('user ==========> ', response);
+    })
+    .catch((err) => {
+      console.log('AUTH ERROR! : ', err);
+    })
+}
+
 export function fetchUser() {
+  initUser();
   return {
     type: "FETCH_USER_FULFILLED",
     payload: {
-      name: "bndao",
-      age: 35,
+      name: "Doftomdow",
+      age: 28,
     }
   }
 }
