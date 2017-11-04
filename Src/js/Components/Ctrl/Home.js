@@ -11,6 +11,7 @@ class Homectrl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: this.props.user,
             wording: this.props.wording,
             collections: this.props.collections
         };
@@ -19,6 +20,7 @@ class Homectrl extends React.Component {
 
     componentWillMount() {
         this.setState({
+            user: this.props.user,
             wording: this.props.wording,
             collections: this.props.collections
         });
@@ -38,31 +40,44 @@ class Homectrl extends React.Component {
     }
 
     render() {
-        var { user, collections } = this.props;
-
-        return (
-            <div className="container">
-                <div className="Content title">
-                    <h3>
-                        {this.state.wording.title}
-                    </h3>
-                    <AddOneColl addOneColl={this.addOneColl}/>
-                    <div class="row">
-                        <div class="ContentLeft col-sm-4">
-                            <ListAllColl
-                                addOneColl={this.props.addOneColl}
-                                addItemToColl={this.props.addItemToColl}
-                                selectOneColl={this.props.selectOneColl}
-                                dropOneColl={this.props.dropOneColl}
-                            />
-                        </div>
-                        <div class="ContentLeft col-xs-12 col-sm-6">
-                            <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem}/>
+        var { user, collections } = this.state;
+        console.log('HOME STATE:', this.state);
+        if (user.userId) {
+            return (
+                <div className="container">
+                    <div className="Content title">
+                        <h3>
+                            {this.state.wording.title}
+                        </h3>
+                        <AddOneColl addOneColl={this.addOneColl}/>
+                        <div class="row">
+                            <div class="ContentLeft col-sm-4">
+                                <ListAllColl
+                                    addOneColl={this.props.addOneColl}
+                                    addItemToColl={this.props.addItemToColl}
+                                    selectOneColl={this.props.selectOneColl}
+                                    dropOneColl={this.props.dropOneColl}
+                                />
+                            </div>
+                            <div class="ContentLeft col-xs-12 col-sm-6">
+                                <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem}/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div className="container">
+                    <div className="Content title">
+                        <h3>
+                            {this.state.wording.title}
+                        </h3>
+                        <h2> Not authorized go back !</h2>
+                    </div>
+                </div>
+            );
+        }
     }
 }
 

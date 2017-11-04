@@ -16,7 +16,7 @@ import {
     updateItem
 } from "./Components/Actions/collectionsActions";
 
-import { fetchUser } from "./Components/Actions/userActions";
+import { getCred, findUser } from "./Components/Actions/userActions";
 import { getLg } from "./Components/XINIT/wordingActions";
 
 import Layout from "./Components/Layout/Layout";
@@ -40,8 +40,8 @@ class App extends Component {
         this.addItem = this.addItem.bind(this);
         this.delItem = this.delItem.bind(this);
         this.updateItem = this.updateItem.bind(this);
-        this.props.dispatch(fetchUser());
         this.props.dispatch(fetchAllCollections());
+        this.props.dispatch(findUser());
         this.props.dispatch(getLg(this.state.lang));
         console.log('Constructed !!!!');
     }
@@ -87,11 +87,12 @@ class App extends Component {
     }
 
     render() {
+        console.log('APP: ', this.props);
         return (
             <Router history={HashRouter}>
                 <div id="app">
                     <Route path='/' render={routeProps => <Layout {...routeProps} lang={this.state.lang} wording={this.state.wording} onChange={this.changeLang}/>} />
-                    <Route exact path="/" render={routeProps => <WelcomePage {...routeProps}  wording={this.state.wording.welcome}/>} />
+                    <Route exact path="/" render={routeProps => <WelcomePage {...routeProps}  wording={this.state.wording.welcome} getCred={getCred}/>} />
                     <div className="bckg">
                         <Route path='/home' render={routeProps =>
                         <HomeCtrl {...routeProps}
@@ -117,7 +118,6 @@ export default compose(connect(state => ({
   wording: state.lang.wording,
   lang: state.lang,
   user: state.user.user,
-  userFetched: state.user.fetched,
   collections: state.collections.collections,
   coll: state.collections.coll
 }))(App));

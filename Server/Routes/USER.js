@@ -18,17 +18,29 @@ router.get('/', (req, res, next) => {
 router.get('/home', (req, res, next) => {
     DbUserController.FindUser(req, res, next)
     .then((data) => {
-      if (data) {
-          console.log('------------------------------');
-          console.log(data);
-          console.log('------------------------------');
-          console.log('auth Success');
-          res.sendFile(path.join(__dirname, '../../Public/index.html'));
-      }
+        if (data) {
+            console.log('user registered');
+            res.sendFile(path.join(__dirname, '../../Public/index.html'));
+        }
     }).catch((err) => {
       console.log('auth Error: \n\n', err);
       return next(err);
     })
+});
+router.post('/finduser', (req, res, next) => {
+    if (req.session.userId) {
+        DbUserController.FindUser(req, res, next)
+        .then((data) => {
+            if (data) {
+                res.json(data);
+            }
+        }).catch((err) => {
+          console.log('auth Error: \n\n', err);
+          res.json(err);
+        })
+    } else {
+        res.json('user not logged In');
+    }
 });
 router.get('/out', (req, res, next) => {
     if (req.session) {
@@ -58,8 +70,13 @@ router.get('/admin', (req, res, next) => {
 router.get('/user/*', (req, res, next) => {
   return next(new Error('ok try again...'));
 });
-
+router.get('/*', (req, res, next) => {
+  var err = new Error("whats going on ?");
+  err.status = err.status || 418;
+  return next(err);
+});
 router.use((err, req, res, next) => {
+    console.log('hmmm... here you go:', err);
   return next(err);
 });
 

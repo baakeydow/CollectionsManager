@@ -1,48 +1,56 @@
 import axios from "axios";
 
-var initUser = function() {
-    var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/' : '/';
-    axios({
-      method: 'post',
-      url: url,
-      data: {
-        // email: 'oy',
-        // username: 'oy',
-        // password: '1234',
-        // passwordConf: '1234'
-        logemail: 'oy',
-        logpassword: '1234'
-      }
-    })
-    .then((response) => {
-        console.log('user ==========> ', response);
-    })
-    .catch((err) => {
-      console.log('AUTH ERROR! : ', err);
-    })
-}
-
-export function fetchUser() {
-  initUser();
-  return {
-    type: "FETCH_USER_FULFILLED",
-    payload: {
-      name: "Doftomdow",
-      age: 28,
+export function getCred(login) {
+    return function(dispatch) {
+        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/' : '/';
+        axios({
+            method: 'post',
+            url: url,
+            data: {
+                logemail: login.username,
+                logpassword: login.passwd
+            }
+        })
+        .then((response) => {
+            dispatch({type: "FETCH_USER_FULFILLED", payload: response.data})
+        })
+        .catch((err) => {
+            console.log('ERROR! : ', err);
+            dispatch({type: "FETCH_USER_REJECTED", payload: err})
+        })
     }
+}
+
+export function findUser() {
+    return function(dispatch) {
+        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/finduser' : '/finduser';
+        axios({
+            method: 'post',
+            url: url,
+            data: {
+                te: 'doftom'
+            }
+        })
+        .then((response) => {
+            dispatch({type: "SET_USER_DATA", payload: response.data})
+        })
+        .catch((err) => {
+            console.log('ERROR! : ', err);
+            dispatch({type: "FETCH_USER_REJECTED", payload: err})
+        })
+    }
+}
+
+export function setUserName(user) {
+  return {
+    type: 'SET_USER',
+    payload: user,
   }
 }
 
-export function setUserName(name) {
+export function setUserAge(data) {
   return {
-    type: 'SET_USER_NAME',
-    payload: name,
-  }
-}
-
-export function setUserAge(age) {
-  return {
-    type: 'SET_USER_AGE',
-    payload: age,
+    type: 'SET_USER_DATA',
+    payload: data,
   }
 }

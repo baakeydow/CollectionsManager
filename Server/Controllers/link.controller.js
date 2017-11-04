@@ -1,5 +1,5 @@
 const mongoose		= require('mongoose');
-const connection	= mongoose.connect('mongodb://localhost:27017/appDB',{
+const connection	= mongoose.connect('mongodb://localhost:27017/userLinks',{
 	useMongoClient: true
 });
 
@@ -29,6 +29,12 @@ var removeColl = (coll) => {
 	return updated;
 }
 
+var protectRoute = (next) => {
+	var err = new Error('403 you need to authenticate yourself');
+	err.status = 403;
+	return next(err);
+}
+
 
 //
 // // // // // Manage Collections
@@ -37,10 +43,10 @@ var removeColl = (coll) => {
 // init
 var ListAllColl = (req, res, next) => {
 	return new Promise((resolve, reject) => {
-        console.log(req.session);
+		if (!req.session.userId) return protectRoute(next);
 		DB.listCollections().toArray((err, doc) => {
 			if (err) return next(reject(err));
-			console.log('list databases: ', doc);
+			// console.log('list databases: ', doc);
 			resolve(res.json(removeColl(doc)));
 		});
 	});

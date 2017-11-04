@@ -26,15 +26,15 @@ var allowXSS			= (req, res, next) => {
 }
 mongoose.Promise = global.Promise;
 // Connect
-mongoose.connect('mongodb://localhost:27017/appDB',{
+mongoose.connect('mongodb://localhost:27017/userLinks',{
 	useMongoClient: true
 });
 mongoose.connection.once('open', () => {
 // Connected !
 });
-//use sessions to track logins
+//use sessions for tracking logins
 app.use(session({
-  secret: '42',
+  secret: 'work hard',
   resave: true,
   saveUninitialized: false,
   store: new MongoStore({
@@ -51,24 +51,24 @@ app.use(helmet());
 // app.disable('x-powered-by'); // handled by helmet
 
 
-app.use('/', USER);
-
 app.use('/db', DB);
 
-app.get('/*', (req, res, next) => {
-  return next(new Error('Here you get a nice url for yourelf... that\'s soooo random'));
-});
+app.use('/', USER);
 
 // catch 404 and forward to error handler
 app.use((err, req, res, next) => {
   err.status = err.status || 404;
   next(err);
 });
+app.get('/*', (req, res, next) => {
+  return next(new Error('Here you get a nice url for yourelf... that\'s soooo random'));
+});
 // error handler
 // define as the last app.use callback
 app.use((err, req, res, next) => {
   if (!err.status || err.status === 500) {
 	  console.log('ALERT ALERT that\'s a 500 ==========================================');
+      console.log(err);
 	  console.log('====================================================================');
   }
   res.status(err.status || 500);
@@ -78,5 +78,5 @@ app.use((err, req, res, next) => {
 
 // Create an HTTP service.
 http.createServer(app).listen(8000, () => {
-	  console.log('Listening on port 8000\n\n\n\n');
+	  console.log('Express app listening on port 8000\n\n\n\n');
 });

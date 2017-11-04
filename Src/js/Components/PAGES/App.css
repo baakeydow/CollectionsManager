@@ -199,11 +199,8 @@ div.ContentRight.col-sm-6.itemList {
     background-color: #f1b7b7;
 }
 .addOneColl {
-    width: 225px;
+    width: 44%;
     margin-bottom: 40px;
-}
-.addOneColl .row {
-    margin-bottom: 20px;
 }
 .addOneItem {
     margin-top: 20px;

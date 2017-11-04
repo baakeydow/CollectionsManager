@@ -4,8 +4,6 @@ const User          = require('./models/user');
 // Create User
 var LoginRegister = (req, res, next) => {
     return new Promise((resolve, reject) => {
-        console.log('User database:');
-        console.log(User.db.name, '\n');
         // confirm that user typed same password twice
         if (req.body.password !== req.body.passwordConf) {
             var err = new Error('Passwords do not match.');
@@ -55,16 +53,14 @@ var LoginRegister = (req, res, next) => {
 // Find User
 var FindUser = (req, res, next) => {
 
-    console.log('session: ', req.session);
     return User.findById(req.session.userId)
         .then((user) => {
             if (!user) {
-                console.log('oooooooooooooooooooooooooo');
                 var err = new Error('Not authorized! Go back!');
                 err.status = 400;
                 return next(err);
             } else {
-                console.log('wtf: ', user);
+                console.log('userFetched: ', user);
                 return user;
             }
         }).catch((error) => {
