@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import AddOneColl from "./Coll/AddOneColl";
 import ListAllColl from "./Coll/ListAllColl";
 import ListItemsFromColl from "./Coll/ListItemsFromColl";
+import GetNetvibesLinks from "../Actions/GetNetvibesLinks";
 
 class Homectrl extends React.Component {
 
@@ -41,7 +42,6 @@ class Homectrl extends React.Component {
 
     render() {
         var { user, collections } = this.state;
-        console.log('HOME STATE:', this.state);
         if (user.userId) {
             return (
                 <div className="container">
@@ -63,17 +63,19 @@ class Homectrl extends React.Component {
                                 <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem}/>
                             </div>
                         </div>
+                        <GetNetvibesLinks/>
                     </div>
                 </div>
             );
         } else {
             return (
                 <div className="container">
-                    <div className="Content title">
+                    <div className="Content title" style={{marginBottom:"1000px"}}>
                         <h3>
                             {this.state.wording.title}
                         </h3>
                         <h2> Not authorized go back !</h2>
+                        <GetNetvibesLinks/>
                     </div>
                 </div>
             );

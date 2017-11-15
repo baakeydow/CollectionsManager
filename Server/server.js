@@ -8,6 +8,7 @@ const serveIndex		= require('serve-index');
 const mongoose			= require('mongoose');
 const DB				= require('./Routes/DB');
 const USER				= require('./Routes/USER');
+const NETVIBES			= require('./Routes/NETVIBES');
 
 const app				= express();
 
@@ -50,6 +51,7 @@ app.use(cookieParser());
 app.use(helmet());
 // app.disable('x-powered-by'); // handled by helmet
 
+app.use('/netvibesdata', NETVIBES);
 
 app.use('/db', DB);
 

@@ -5,8 +5,8 @@ const Hello = {
   home: {
     title: "Welcome"
   },
-  about: {
-    title: "About"
+  articles: {
+    title: "Articles"
   },
   contact: {
     title: "Contact Us",
@@ -25,8 +25,8 @@ const Bonjour = {
   home: {
     title: "Bonjour !"
   },
-  about: {
-    title: "À Propos"
+  articles: {
+    title: "Nos Articles"
   },
   contact: {
     title: "Contactez Nous",

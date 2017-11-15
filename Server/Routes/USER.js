@@ -42,7 +42,7 @@ router.post('/finduser', (req, res, next) => {
         res.json('user not logged In');
     }
 });
-router.get('/out', (req, res, next) => {
+router.post('/out', (req, res, next) => {
     if (req.session) {
         // delete session object
         req.session.destroy(function (err) {
@@ -58,10 +58,10 @@ router.get('/out', (req, res, next) => {
         return res.redirect('/');
     }
 });
-router.get('/about', (req, res, next) => {
+router.get('/contact', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/contact', (req, res, next) => {
+router.get('/articles', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/admin', (req, res, next) => {
@@ -76,7 +76,7 @@ router.get('/*', (req, res, next) => {
   return next(err);
 });
 router.use((err, req, res, next) => {
-    console.log('hmmm... here you go:', err);
+    console.log('-1----1----1----1-------------11----------------1--------1-1--------------yooooooo I got you:', err);
   return next(err);
 });
 

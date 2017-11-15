@@ -7,6 +7,10 @@ export function getCred(login) {
             method: 'post',
             url: url,
             data: {
+                // email: 'oy',
+                // username: 'oy',
+                // password: '1234',
+                // passwordConf: '1234'
                 logemail: login.username,
                 logpassword: login.passwd
             }

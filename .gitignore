@@ -8,6 +8,7 @@ node_modules
 Public/client.min.js
 
 # misc
+Public/folder/
 .DS_Store
 .env.local
 .env.development.local

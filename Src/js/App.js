@@ -23,7 +23,8 @@ import Layout from "./Components/Layout/Layout";
 
 import WelcomePage from "./Components/Ctrl/WelcomePage";
 import HomeCtrl from "./Components/Ctrl/Home";
-import AboutCtrl from "./Components/Ctrl/About";
+import ArticlesCtrl from "./Components/Ctrl/Articles";
+import ContactCtrl from "./Components/Ctrl/Contact";
 
 class App extends Component {
 
@@ -91,7 +92,7 @@ class App extends Component {
         return (
             <Router history={HashRouter}>
                 <div id="app">
-                    <Route path='/' render={routeProps => <Layout {...routeProps} lang={this.state.lang} wording={this.state.wording} onChange={this.changeLang}/>} />
+                    <Route path='/' render={routeProps => <Layout {...routeProps} user={this.props.user} lang={this.state.lang} wording={this.state.wording} onChange={this.changeLang}/>} />
                     <Route exact path="/" render={routeProps => <WelcomePage {...routeProps}  wording={this.state.wording.welcome} getCred={getCred}/>} />
                     <div className="bckg">
                         <Route path='/home' render={routeProps =>
@@ -104,7 +105,8 @@ class App extends Component {
                             updateItem={this.updateItem}
                             collections={this.props.collections}/>}
                         />
-                        <Route path='/about' render={routeProps => <AboutCtrl {...routeProps} wording={this.state.wording.about}/>} />
+                        <Route path='/articles' render={routeProps => <ArticlesCtrl {...routeProps} wording={this.state.wording.articles}/>} />
+                        <Route path='/contact' render={routeProps => <ContactCtrl {...routeProps} wording={this.state.wording.contact}/>} />
                     </div>
                     <div className="Customfooter">
                     </div>

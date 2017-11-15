@@ -22,7 +22,11 @@ mongoose.connection.once('open', () => {
 var removeColl = (coll) => {
 	var updated = [];
 	coll.forEach((collection) => {
-		if (collection.name !== 'users' && collection.name !== 'sessions' && collection.name !== 'system.indexes') {
+		if (collection.name !== 'users' &&
+			collection.name !== 'sessions' &&
+			collection.name !== 'netpost' &&
+			collection.name !== 'netvibesArticles' &&
+			collection.name !== 'system.indexes') {
 			updated.push(collection);
 		}
 	})

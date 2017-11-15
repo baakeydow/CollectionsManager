@@ -1,6 +1,6 @@
 import React from "react";
 import Nav from "./Nav";
-import '../PAGES/App.css';
+import './App.css';
 
 export default class Layout extends React.Component {
 
@@ -25,6 +25,7 @@ export default class Layout extends React.Component {
     let NavProps = {
       lang: this.props.lang,
       wording: this.props.wording,
+      user: this.props.user
     }
     const containerStyle = {
       marginTop: "40px"

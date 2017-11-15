@@ -1,6 +1,7 @@
 import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
 class WelcomePage extends React.Component {
 
@@ -52,6 +53,13 @@ class WelcomePage extends React.Component {
   }
 
   render() {
+    if (this.state.user && this.state.user.userId) {
+        return (
+            <Redirect to={{
+                pathname: '/home',
+            }}/>
+        )
+    }
     return (
         <div className="container">
                 <div className="Content title">
@@ -66,7 +74,7 @@ class WelcomePage extends React.Component {
                                 <input value={this.state.form.passwd} onChange={this.handleChange} name="passwd" type="password" className="form-control" placeholder="****************"/>
                             </div>
                         </div>
-                        <div className="ContentCenter">
+                        <div className="ContentCenter" style={{marginBottom:'20px'}}>
                             <button type="submit" className="btn btn-primary">
                                 {this.state.wording.cta}
                             </button>
