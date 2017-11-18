@@ -1,6 +1,7 @@
 const express 			= require('express');
 const path 				= require('path');
 const http 				= require('http');
+const auth 				= require('http-auth');
 const bodyParser 		= require('body-parser');
 const cookieParser		= require('cookie-parser');
 const helmet 			= require('helmet')
@@ -16,15 +17,24 @@ var session 			= require('express-session');
 var MongoStore			= require('connect-mongo')(session);
 
 var allowXSS			= (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, application/json; charset=utf-8 ,Authorization, Content-Length, X-Requested-With, application/x-www-form-urlencoded');
+	res.header('Access-Control-Allow-Origin', "*");
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, application/json; charset=utf-8 ,Authorization, Content-Length, X-Requested-With, application/x-www-form-urlencoded');
 		if ('OPTIONS' == req.method) {
 			res.sendStatus(200);
 		} else {
 			next();
 		}
 }
+
+// username:user
+// password:private
+
+const basic				= auth.basic({
+	realm: "Nope It's Private",
+	file: __dirname + "/users.htpasswd"
+});
+
 mongoose.Promise = global.Promise;
 // Connect
 mongoose.connect('mongodb://localhost:27017/userLinks',{
@@ -44,7 +54,7 @@ app.use(session({
 }));
 app.use(allowXSS);
 app.use(express.static(path.join(__dirname, '..', 'Public')));
-app.use('/4242', express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
+app.use('/4242', auth.connect(basic), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

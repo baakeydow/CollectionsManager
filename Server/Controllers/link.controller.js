@@ -25,7 +25,9 @@ var removeColl = (coll) => {
 		if (collection.name !== 'users' &&
 			collection.name !== 'sessions' &&
 			collection.name !== 'netpost' &&
+			collection.name !== 'dropboxImages' &&
 			collection.name !== 'netvibesArticles' &&
+			collection.name !== 'InstagramPosts' &&
 			collection.name !== 'system.indexes') {
 			updated.push(collection);
 		}
@@ -50,7 +52,6 @@ var ListAllColl = (req, res, next) => {
 		if (!req.session.userId) return protectRoute(next);
 		DB.listCollections().toArray((err, doc) => {
 			if (err) return next(reject(err));
-			// console.log('list databases: ', doc);
 			resolve(res.json(removeColl(doc)));
 		});
 	});
@@ -61,7 +62,6 @@ var AddDbColl = (req, res, next) => {
 		DB.createCollection(req.body.coll).then(() => {
 			DB.listCollections().toArray((err, doc) => {
 				if (err) return next(reject(err));
-				console.log('added: ', doc);
 				resolve(res.json(removeColl(doc)));
 			});
 		});
@@ -70,6 +70,7 @@ var AddDbColl = (req, res, next) => {
 // Drop one !
 var DropDbColl = (req, res, next) => {
 	return new Promise((resolve, reject) => {
+		if (!req.session.userId) return protectRoute(next);
 		DB.dropCollection(req.body.coll).then((waw) => {
 			DB.listCollections().toArray((err, doc) => {
 				if (err) return next(reject(err));
@@ -82,17 +83,16 @@ var DropDbColl = (req, res, next) => {
 // Get one Collection and return the content of it !
 var GetOneDbColl = (req, res, next) => {
 	var coll = DB.collection(req.body.coll);
-var funcs = [];
-for(var name in coll) {
-	if(typeof coll[name] === 'function') {
-		funcs.push(name)
-	}
-};
+	var funcs = [];
+	for(var name in coll) {
+		if(typeof coll[name] === 'function') {
+			funcs.push(name)
+		}
+	};
 	console.log('\n\nCollection methods: ', funcs, '\n\nHere you go... \n');
 	return new Promise((resolve, reject) => {
 		coll.find().toArray((err, doc) => {
 			if (err) return next(reject(err));
-			console.log('Content of the Collection returned => ', doc);
 			resolve(res.json(doc));
 		});
 	});
@@ -147,7 +147,7 @@ var AddItem = (req, res, next) => {
 			if (error) return next(reject(error));
 			coll.find().toArray((err, doc) => {
 				if (err) return next(reject(err));
-				console.log('Content of the Collection updated => ', doc);
+				console.log('Content of the Collection updated !');
 				resolve(res.json(doc));
 			});
 		});

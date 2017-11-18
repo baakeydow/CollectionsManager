@@ -23,6 +23,7 @@ export default class Nav extends React.Component {
         })
         .then((response) => {
             console.log("user logged out");
+            window.location.reload();
         })
         .catch((err) => {
             console.log('ERROR! : ', err);
@@ -54,6 +55,7 @@ export default class Nav extends React.Component {
     const homeClass = location.pathname === "/home" ? "active" : "";
     const articleClass = location.pathname.match(/^\/articles/) ? "active" : "";
     const contactClass = location.pathname.match(/^\/contact/) ? "active" : "";
+    const imagesClass = location.pathname.match(/^\/images/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
     const navStyle = {
         backgroundColor: "#353536"
@@ -93,10 +95,13 @@ export default class Nav extends React.Component {
               <li className={articleClass}>
                 <NavLink to="/articles" onClick={this.toggleCollapse.bind(this)}>{wording.articles.title}</NavLink>
               </li>
+              <li className={imagesClass}>
+                <NavLink to="/images" onClick={this.toggleCollapse.bind(this)}>{wording.images.title}</NavLink>
+              </li>
               <li className={contactClass}>
                 <NavLink to="/contact" onClick={this.toggleCollapse.bind(this)}>{wording.contact.title}</NavLink>
               </li>
-              <li style={{width:'200px', margin:"-2px"}}>
+              <li style={{width:'200px', height:"50px"}}>
                 <NavLink style={{float:'right'}} to="/"><button onClick={this.logOut}>{btnState}</button></NavLink>
               </li>
             </ul>

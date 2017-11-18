@@ -5,8 +5,33 @@ import AddItem from "./AddItem";
 
 class AllColl extends React.Component {
 
-    showEditMode(id, e) {
-        var btn = document.getElementById(id)
+    togglEditMode(collName, e) {
+        var el = document.getElementsByClassName(collName)[0];
+        var collections = document.getElementsByClassName("collection-detail");
+        if (el.style.display === "block") {
+            el.style.display = "none";
+            Object.keys(collections).map((i) => {
+                collections[i].previousSibling.style.display = 'flex';
+                collections[i].parentNode.style.display = "block";
+            })
+        } else {
+            this.props.selectOneColl(collName);
+            this.refs[collName].style.display = "none";
+            Object.keys(collections).map((i) => {
+                collections[i].style.display = 'none';
+                collections[i].previousSibling.style.display = 'flex';
+                collections[i].parentNode.style.borderStyle = 'none';
+                collections[i].parentNode.style.display = "none";
+            })
+            el.parentNode.style.display = "block";
+            el.parentNode.style.borderStyle = "solid";
+            el.style.display = 'block';
+        }
+        e.preventDefault();
+    }
+
+    showdeleteBtn(id, e) {
+        var btn = document.getElementById(id);
         if (btn) {
             if (btn.style.display === 'none') {
                 btn.style.display = 'flex';
@@ -23,19 +48,25 @@ class AllColl extends React.Component {
 
         var collectionsList = collections.map((coll, i) =>
             <div className="singleColl" key={i}>
-                <div className="toolbar ContentCenter">
-                    <button className="btn btn-success" onClick={ this.props.selectOneColl.bind(this, coll.name) }><span>List</span></button>
-                    <li onClick={this.showEditMode.bind(this, coll.name)} className="legend">&nbsp;{coll.name}</li>
-                    <button id={coll.name} className="btn btn-danger" onClick={ this.props.dropOneColl.bind(this, coll.name) }><span>Drop</span></button>
+                <div ref={coll.name} className="ContentCenter">
+                    <button onClick={this.togglEditMode.bind(this, coll.name)} className={ "btn btn-info ContentCenter toolbar" + coll.name }>
+                        {coll.name}
+                    </button>
                 </div>
-                <AddItem dbColl={coll.name} addOneItem={this.props.addItemToColl}/>
+                <div className={ "collection-detail " + coll.name }>
+                    <div className="toolbar ContentCenter">
+                        <li onClick={this.showdeleteBtn.bind(this, coll.name)} className="legend">&nbsp;{coll.name}</li>
+                        <button id={coll.name} className="btn btn-danger" onClick={ this.props.dropOneColl.bind(this, coll.name) }><span>Drop</span></button>
+                    </div>
+                    <AddItem dbColl={coll.name} addOneItem={this.props.addItemToColl}/>
+                </div>
             </div>
         );
         if (!collectionsList.length) {
             collectionsList = <p>No Collections !</p>
         }
         return (
-            <div className="ListAllColl">
+            <div className="ListAllCollections">
                 {collectionsList}
             </div>
         );

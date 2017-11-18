@@ -75,6 +75,12 @@
     align-items: center;
     margin: 40px 0;
 }
+.ContentCenterMarginBottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
 .ContentCenter {
     display: flex;
     justify-content: center;
@@ -166,15 +172,25 @@ div#app {
 /*#             collection and items*/
 /*#####*/
 
-.ListAllColl .singleColl .toolbar.ContentCenter .btn-danger {
+.ListAllCollections .singleColl .toolbar.ContentCenter .btn-danger {
     display: none;
 }
 
 .ListAllColl {
-    display: table-row;
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.ListAllArticles {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.ListAllCollections {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .singleColl {
-    margin-bottom: 10px;
     border-style: ridge;
     padding: 10px;
 }
@@ -184,6 +200,10 @@ div#app {
     border-width: 1px;
     background-color: white;
     border-radius: 4px;
+}
+.collection-detail {
+    display: none;
+    margin-top: 40px;
 }
 .toolbar .btn {
     width: 24px;
@@ -231,6 +251,11 @@ div.ContentRight.col-sm-6.itemList {
     width: 100%;
 }
 .mappedLinksColl {
+    display: table-row;
+    margin: 20px 0;
+    width: 100%;
+}
+.mappedLinksCollWithImages {
     margin: 20px 0;
     width: 100%;
 }

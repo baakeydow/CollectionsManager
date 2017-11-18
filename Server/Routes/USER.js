@@ -12,21 +12,6 @@ router.post('/', (req, res, next) => {
       console.log('auth Error: \n\n', err);
     })
 });
-router.get('/', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../../Public/index.html'));
-});
-router.get('/home', (req, res, next) => {
-    DbUserController.FindUser(req, res, next)
-    .then((data) => {
-        if (data) {
-            console.log('user registered');
-            res.sendFile(path.join(__dirname, '../../Public/index.html'));
-        }
-    }).catch((err) => {
-      console.log('auth Error: \n\n', err);
-      return next(err);
-    })
-});
 router.post('/finduser', (req, res, next) => {
     if (req.session.userId) {
         DbUserController.FindUser(req, res, next)
@@ -58,10 +43,31 @@ router.post('/out', (req, res, next) => {
         return res.redirect('/');
     }
 });
+router.get('/', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/home', (req, res, next) => {
+    DbUserController.FindUser(req, res, next)
+    .then((data) => {
+        if (data) {
+            console.log('------------------------------');
+            console.log(data);
+            console.log('------------------------------');
+            console.log('user registered');
+            res.sendFile(path.join(__dirname, '../../Public/index.html'));
+        }
+    }).catch((err) => {
+      console.log('auth Error: \n\n', err);
+      return next(err);
+    })
+});
 router.get('/contact', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/articles', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/images', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/admin', (req, res, next) => {

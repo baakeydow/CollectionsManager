@@ -24,6 +24,7 @@ import Layout from "./Components/Layout/Layout";
 import WelcomePage from "./Components/Ctrl/WelcomePage";
 import HomeCtrl from "./Components/Ctrl/Home";
 import ArticlesCtrl from "./Components/Ctrl/Articles";
+import ImagesCtrl from "./Components/Ctrl/Images";
 import ContactCtrl from "./Components/Ctrl/Contact";
 
 class App extends Component {
@@ -88,7 +89,6 @@ class App extends Component {
     }
 
     render() {
-        console.log('APP: ', this.props);
         return (
             <Router history={HashRouter}>
                 <div id="app">
@@ -102,10 +102,10 @@ class App extends Component {
                             dropOneColl={this.dropOneColl}
                             addItemToColl={this.addItem}
                             delItem={this.delItem}
-                            updateItem={this.updateItem}
-                            collections={this.props.collections}/>}
+                            updateItem={this.updateItem}/>}
                         />
                         <Route path='/articles' render={routeProps => <ArticlesCtrl {...routeProps} wording={this.state.wording.articles}/>} />
+                        <Route path='/images' render={routeProps => <ImagesCtrl {...routeProps} wording={this.state.wording.images}/>} />
                         <Route path='/contact' render={routeProps => <ContactCtrl {...routeProps} wording={this.state.wording.contact}/>} />
                     </div>
                     <div className="Customfooter">

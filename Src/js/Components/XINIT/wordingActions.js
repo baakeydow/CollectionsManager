@@ -3,10 +3,13 @@ const Hello = {
     cta: "Discover"
   },
   home: {
-    title: "Welcome"
+    title: "Links"
   },
   articles: {
     title: "Articles"
+  },
+  images: {
+    title: "Pictures"
   },
   contact: {
     title: "Contact Us",
@@ -23,10 +26,13 @@ const Bonjour = {
     cta: "Découvrir"
   },
   home: {
-    title: "Bonjour !"
+    title: "Links !"
   },
   articles: {
     title: "Nos Articles"
+  },
+  images: {
+    title: "Images"
   },
   contact: {
     title: "Contactez Nous",
