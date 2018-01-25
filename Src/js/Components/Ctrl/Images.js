@@ -30,7 +30,9 @@ export default class ImagesCtrl extends React.Component {
             <div className="Content title">
                 <h3>{this.props.wording.title}</h3>
                 <ImagesNetvibesLinks/>
+                <h3>Instagram</h3>
                 <ImagesNetvibesInstagram/>
+                <h3>DropBox</h3>
                 <ImagesNetvibesDropbox/>
             </div>
         </div>

@@ -81,7 +81,7 @@ router.route('/delimg').post((req, res, next) => {
 			var coll = DB.collection('netpost');
 			ModelItem.remove({ _id: req.body.id }, function (error) {
 				if (error) return next(reject(error));
-				coll.find().toArray((err, doc) => {
+				coll.find().sort({ $natural: -1 }).sort({ $natural: -1 }).toArray((err, doc) => {
 					if (err) return next(reject(err));
 					console.log('Img deleted');
 					resolve(res.json(doc));
@@ -99,7 +99,7 @@ router.route('/deleteArticle').post((req, res, next) => {
 			var coll = DB.collection('netvibesArticles');
 			ModelItem.remove({ _id: req.body.id }, function (error) {
 				if (error) return next(reject(error));
-				coll.find().toArray((err, doc) => {
+				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 					if (err) return next(reject(err));
 					console.log('Item deleted');
 					resolve(res.json(doc));
@@ -117,7 +117,7 @@ router.route('/delinstagram').post((req, res, next) => {
 			var coll = DB.collection('InstagramPosts');
 			ModelItem.remove({ _id: req.body.id }, function (error) {
 				if (error) return next(reject(error));
-				coll.find().toArray((err, doc) => {
+				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 					if (err) return next(reject(err));
 					console.log('Item deleted');
 					resolve(res.json(doc));
@@ -135,7 +135,7 @@ router.route('/deldropboximage').post((req, res, next) => {
 			var coll = DB.collection('dropboxImages');
 			ModelItem.remove({ _id: req.body.id }, function (error) {
 				if (error) return next(reject(error));
-				coll.find().toArray((err, doc) => {
+				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 					if (err) return next(reject(err));
 					console.log('Item deleted');
 					resolve(res.json(doc));
@@ -148,33 +148,52 @@ router.route('/deldropboximage').post((req, res, next) => {
 
 // Find
 
+function getPage(collection, start, nb, sortQuery) {
+	return new Promise((resolve, reject) => {
+		collection.find()
+		.skip(parseInt(start))
+		.limit(parseInt(nb))
+		.sort(sortQuery)
+		.toArray((err, doc) => {
+			if (err) reject(err);
+			resolve(doc);
+		});
+	});
+}
+
 router.get('/img', (req, res, next) => {
     var coll = DB.collection("netpost");
-    coll.find().toArray((err, doc) => {
-        if (err) return next(err);
-        res.json(doc);
-    });
+	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+	.then((doc) => {
+		res.json(doc);
+	}).catch((err) => {
+		return next(err);
+	});
 });
 
 router.get('/articles', (req, res, next) => {
     var coll = DB.collection("netvibesArticles");
-    coll.find().toArray((err, doc) => {
-        if (err) return next(err);
-        res.json(doc);
-    });
+	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+	.then((doc) => {
+		res.json(doc);
+	}).catch((err) => {
+		return next(err);
+	});
 });
 
 router.get('/instagram', (req, res, next) => {
 	var coll = DB.collection("InstagramPosts");
-    coll.find().toArray((err, doc) => {
-        if (err) return next(err);
-        res.json(doc);
-    });
+	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+	.then((doc) => {
+		res.json(doc);
+	}).catch((err) => {
+		return next(err);
+	});
 });
 
 router.get('/dropbox', (req, res, next) => {
 	var coll = DB.collection("dropboxImages");
-    coll.find().toArray((err, doc) => {
+    coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
         if (err) return next(err);
         res.json(doc);
     });

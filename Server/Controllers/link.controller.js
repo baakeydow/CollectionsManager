@@ -1,4 +1,5 @@
 const mongoose		= require('mongoose');
+const Promise		= require("bluebird");
 const connection	= mongoose.connect('mongodb://localhost:27017/userLinks',{
 	useMongoClient: true
 });
@@ -19,16 +20,12 @@ mongoose.connection.once('open', () => {
 	console.log('\n\nDatabase methods: ', funcs, '\n\nWe are in business... \n');
 });
 
+const forbiddenCollections = ['users', 'sessions', 'netpost', 'dropboxImages', 'netvibesArticles', 'InstagramPosts', 'system.indexes'];
+
 var removeColl = (coll) => {
 	var updated = [];
 	coll.forEach((collection) => {
-		if (collection.name !== 'users' &&
-			collection.name !== 'sessions' &&
-			collection.name !== 'netpost' &&
-			collection.name !== 'dropboxImages' &&
-			collection.name !== 'netvibesArticles' &&
-			collection.name !== 'InstagramPosts' &&
-			collection.name !== 'system.indexes') {
+		if (!forbiddenCollections.includes(collection.name)) {
 			updated.push(collection);
 		}
 	})
@@ -46,6 +43,29 @@ var protectRoute = (next) => {
 // // // // // Manage Collections
 //
 
+
+// List all items from all Collections
+var ListAllItemsFromAllColl = (req, res, next) => {
+	var aggregate = new Promise((resolved, rejected) => {
+			DB.listCollections().toArray((err, doc) => {
+			var collections = removeColl(doc);
+			var promises = [];
+			collections.forEach((collection) => {
+				var coll = DB.collection(collection.name);
+				promises.push(coll.find().sort({ $natural: -1 }).toArray());
+			});
+			resolved(promises);
+		});
+	});
+
+	return new Promise((resolve, reject) => {
+		return aggregate.then((pending) => {
+			Promise.all(pending).then((data) => {
+				resolve(res.json(data));
+			});
+		});
+	});
+}
 // init
 var ListAllColl = (req, res, next) => {
 	return new Promise((resolve, reject) => {
@@ -91,7 +111,7 @@ var GetOneDbColl = (req, res, next) => {
 	};
 	console.log('\n\nCollection methods: ', funcs, '\n\nHere you go... \n');
 	return new Promise((resolve, reject) => {
-		coll.find().toArray((err, doc) => {
+		coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 			if (err) return next(reject(err));
 			resolve(res.json(doc));
 		});
@@ -143,9 +163,8 @@ var AddItem = (req, res, next) => {
 		var newItem = new ModelItem(item);
 
 		newItem.save(function(error) {
-			console.log(error);
 			if (error) return next(reject(error));
-			coll.find().toArray((err, doc) => {
+			coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 				if (err) return next(reject(err));
 				console.log('Content of the Collection updated !');
 				resolve(res.json(doc));
@@ -157,13 +176,13 @@ var AddItem = (req, res, next) => {
 var DelOneItem = (req, res, next) => {
 	var coll = DB.collection(req.body.item.belongsTo);
 	var id = req.body.item._id;
-
+	if (!req.session.userId) return protectRoute(next);
 	return new Promise((resolve, reject) => {
 		var ModelItem = mongoose.model(req.body.item.belongsTo, itemSchema.set('collection', req.body.item.belongsTo));
 
 		ModelItem.remove({ _id: id }, function (error) {
 			if (error) return next(reject(error));
-			coll.find().toArray((err, doc) => {
+			coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
 				if (err) return next(reject(err));
 				console.log('Item deleted');
 				resolve(res.json(doc));
@@ -173,26 +192,46 @@ var DelOneItem = (req, res, next) => {
 }
 
 var UpdateItem = (req, res, next) => {
-	var coll = DB.collection(req.body.item.itemToUpdate.belongsTo);
-	var id = req.body.item.id
-
-	return new Promise((resolve, reject) => {
-		var ModelItem = mongoose.model(req.body.item.itemToUpdate.belongsTo, itemSchema.set('collection', req.body.item.itemToUpdate.belongsTo));
-
-		ModelItem.update({ _id: id }, req.body.item.itemToUpdate, { multi: false }, function (error, raw) {
-			if (error) return next(reject(error));
-			console.log('RAW Answer from Mongodb: ', raw);
-			coll.find().toArray((err, doc) => {
-				if (err) return next(reject(err));
-				resolve(res.json(doc));
+	var coll = DB.collection(req.body.item.oldCollection);
+	if (!req.session.userId) return protectRoute(next);
+	if (req.body.item.oldCollection !== req.body.item.collectionToGo) {
+		var oldId = req.body.item.id;
+		var ModelItem = mongoose.model(req.body.item.oldCollection, itemSchema.set('collection', req.body.item.oldCollection));
+		return new Promise((resolve, reject) => {
+			ModelItem.remove({ _id: oldId }, function (badError) {
+				if (badError) return next(badError);
+				var newModel = mongoose.model(req.body.item.collectionToGo, itemSchema.set('collection', req.body.item.collectionToGo));
+				var newItem = new newModel(req.body.item.itemToUpdate);
+				newItem.save(function(error) {
+					if (error) return next(reject(error));
+					coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+						if (err) return next(reject(err));
+						console.log('Item moved !');
+						resolve(res.json(doc));
+					});
+				});
 			});
 		});
-	});
+	} else {
+		var id = req.body.item.id
+		return new Promise((resolve, reject) => {
+			var ModelItem = mongoose.model(req.body.item.itemToUpdate.belongsTo, itemSchema.set('collection', req.body.item.itemToUpdate.belongsTo));
+			ModelItem.update({ _id: id }, req.body.item.itemToUpdate, { multi: false }, function (error, raw) {
+				if (error) return next(reject(error));
+				console.log('Item updated !');
+				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+					if (err) return next(reject(err));
+					resolve(res.json(doc));
+				});
+			});
+		});
+	}
 }
 
 module.exports = {
     AddItem : AddItem,
     ListAllColl : ListAllColl,
+    ListAllItemsFromAllColl : ListAllItemsFromAllColl,
     GetOneDbColl : GetOneDbColl,
     AddDbColl : AddDbColl,
     DropDbColl : DropDbColl,

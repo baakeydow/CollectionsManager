@@ -30,14 +30,11 @@ router.post('/finduser', (req, res, next) => {
 router.post('/out', (req, res, next) => {
     if (req.session) {
         // delete session object
-        req.session.destroy(function (err) {
-            if (err) {
-                return next(err);
-            } else {
-                console.log('session deleted !');
-                return res.redirect('/');
-            }
-        });
+        req.session.destroy((err) => {
+            if (err) return next(err);
+            console.log('session deleted !');
+            return res.redirect('/');
+        })
     } else {
         console.log('did not log out');
         return res.redirect('/');
@@ -61,13 +58,13 @@ router.get('/home', (req, res, next) => {
       return next(err);
     })
 });
-router.get('/contact', (req, res, next) => {
+router.get('/contact*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/articles', (req, res, next) => {
+router.get('/articles*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/images', (req, res, next) => {
+router.get('/images*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/admin', (req, res, next) => {
@@ -82,7 +79,7 @@ router.get('/*', (req, res, next) => {
   return next(err);
 });
 router.use((err, req, res, next) => {
-    console.log('-1----1----1----1-------------11----------------1--------1-1--------------yooooooo I got you:', err);
+    console.log('\\o/ Waddup ?:', err);
   return next(err);
 });
 

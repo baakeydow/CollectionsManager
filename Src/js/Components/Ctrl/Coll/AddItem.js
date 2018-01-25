@@ -27,7 +27,6 @@ class AddItem extends React.Component {
     }
 
     addItem(event) {
-        console.log(this.props.dbColl);
         if (this.state.form.desc && this.state.form.url) {
             var data = {
                 link: {

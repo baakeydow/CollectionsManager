@@ -2,32 +2,52 @@ import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
 import axios from "axios";
+import InfiniteScroll from 'react-infinite-scroller';
 
 class GetNetvibesLinks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: null
+            items: [],
+            start: 0,
+            count: 10,
+            hasMore: true
         };
         this.getThemLinks = this.getThemLinks.bind(this);
     }
 
     getThemLinks() {
         var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/img' : '/netvibesdata/img';
-
+        const params = {
+            start: this.state.start,
+            limit: this.state.count,
+        };
         axios({
             method: 'get',
-            url: url
+            url: url,
+            params: params
         })
         .then((response) => {
-            this.setState({
-                items: response.data
-            });
+            if (!response.data.length) {
+                this.setState({
+                    hasMore: false
+                });
+            } else {
+                var items = this.state.items;
+                response.data.forEach((data) => {
+                     items.push(data)
+                })
+                this.setState({
+                    items: items,
+                    start: this.state.count + this.state.start
+                });
+            }
         })
         .catch((err) => {
             console.log('ERROR! : ', err);
             this.setState({
-                items: err
+                items: [],
+                hasMore: false
             });
         })
     }
@@ -56,10 +76,6 @@ class GetNetvibesLinks extends React.Component {
         })
     }
 
-    componentWillMount() {
-        this.getThemLinks();
-    }
-
     render() {
         var { items } = this.state;
         var imageLinks = [];
@@ -86,7 +102,14 @@ class GetNetvibesLinks extends React.Component {
         }
         return (
             <div className="mappedLinksCollWithImages">
-                {imageLinks}
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={this.getThemLinks.bind(this)}
+                    hasMore={this.state.hasMore}
+                    loader={<div className="loader" key={0}>Loading ...</div>}
+                >
+                    {imageLinks}
+                </InfiniteScroll>
             </div>
         );
     }

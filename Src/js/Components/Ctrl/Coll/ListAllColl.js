@@ -20,7 +20,7 @@ class AllColl extends React.Component {
             Object.keys(collections).map((i) => {
                 collections[i].style.display = 'none';
                 collections[i].previousSibling.style.display = 'flex';
-                collections[i].parentNode.style.borderStyle = 'none';
+                collections[i].parentNode.style.borderStyle = 'ridge';
                 collections[i].parentNode.style.display = "none";
             })
             el.parentNode.style.display = "block";

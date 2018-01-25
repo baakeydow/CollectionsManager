@@ -65,6 +65,7 @@ class App extends Component {
 
     dropOneColl(data) {
         this.props.dispatch(dropOneCollection(data));
+        window.location.reload();
     }
 
     addItem(data) {

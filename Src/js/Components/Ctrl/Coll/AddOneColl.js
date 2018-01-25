@@ -40,13 +40,8 @@ class AddColl extends React.Component {
     render() {
         return (
             <form className="addOneColl" onSubmit={this.addColl}>
-                <div className="row">
-                    <div className="form-group col-xs-12 ">
-                        <label>Add Collections !!!</label>
-                        <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="TechLinks"/>
-                    </div>
-                </div>
-                <div className="ContentRight">
+                <div className="inputBtn">
+                    <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="TechLinks"/>
                     <button type="submit" className="btn btn-success">ADD</button>
                 </div>
             </form>

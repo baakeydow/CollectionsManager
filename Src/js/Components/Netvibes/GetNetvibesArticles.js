@@ -3,12 +3,16 @@ import { compose } from 'redux';
 import { connect } from "react-redux";
 import axios from "axios";
 import ReactHtmlParser from 'react-html-parser';
+import InfiniteScroll from 'react-infinite-scroller';
 
 class GetNetvibesLinks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: null
+            items: [],
+            start: 0,
+            count: 10,
+            hasMore: true
         };
         this.getThemArticles = this.getThemArticles.bind(this);
         this.deleteArticle = this.deleteArticle.bind(this);
@@ -16,20 +20,36 @@ class GetNetvibesLinks extends React.Component {
 
     getThemArticles() {
         var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/articles' : '/netvibesdata/articles';
-
+        const params = {
+            start: this.state.start,
+            limit: this.state.count,
+        };
         axios({
             method: 'get',
-            url: url
+            url: url,
+            params: params
         })
         .then((response) => {
-            this.setState({
-                items: response.data
-            });
+            if (!response.data.length) {
+                this.setState({
+                    hasMore: false
+                });
+            } else {
+                var items = this.state.items;
+                response.data.forEach((data) => {
+                     items.push(data)
+                })
+                this.setState({
+                    items: items,
+                    start: this.state.count + this.state.start
+                });
+            }
         })
         .catch((err) => {
             console.log('ERROR! : ', err);
             this.setState({
-                items: err
+                items: [],
+                hasMore: false
             });
         })
     }
@@ -56,10 +76,6 @@ class GetNetvibesLinks extends React.Component {
                 items: err
             });
         })
-    }
-
-    componentWillMount() {
-        this.getThemArticles();
     }
 
     render() {
@@ -91,7 +107,14 @@ class GetNetvibesLinks extends React.Component {
         }
         return (
             <div className="mappedLinksCollWithImages">
-                {articles}
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={this.getThemArticles.bind(this)}
+                    hasMore={this.state.hasMore}
+                    loader={<div className="loader" key={0}>Loading ...</div>}
+                >
+                    {articles}
+                </InfiniteScroll>
             </div>
         );
     }

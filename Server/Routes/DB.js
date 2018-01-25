@@ -13,6 +13,16 @@ router.route('/list').get((req, res, next) => {
     })
 });
 
+// return a list of all items from all Coll
+router.route('/listall').get((req, res, next) => {
+    DbLinkController.ListAllItemsFromAllColl(req, res, next)
+    .then((data) => {
+      console.log('oO');
+    }).catch((err) => {
+      console.log('here is the Error: \n\n', err);
+    })
+});
+
 // Get one Coll by name and list it
 router.route('/getdbcoll').post((req, res, next) => {
     DbLinkController.GetOneDbColl(req, res, next)

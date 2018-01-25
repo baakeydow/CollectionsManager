@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import AddOneColl from "./Coll/AddOneColl";
 import ListAllColl from "./Coll/ListAllColl";
 import ListItemsFromColl from "./Coll/ListItemsFromColl";
+import ListItemsFromAllColl from "./Coll/ListItemsFromAllColl";
 
 class Homectrl extends React.Component {
 
@@ -49,19 +50,19 @@ class Homectrl extends React.Component {
                         <h3>
                             {this.state.wording.title}
                         </h3>
-                        <AddOneColl addOneColl={this.addOneColl}/>
-                        <div class="row">
-                            <div class="ContentCenter">
-                                <ListAllColl
-                                    addOneColl={this.props.addOneColl}
-                                    addItemToColl={this.props.addItemToColl}
-                                    selectOneColl={this.props.selectOneColl}
-                                    dropOneColl={this.props.dropOneColl}
-                                />
-                            </div>
-                            <div class="ContentLeft" style={{marginTop:'30px'}}>
-                                <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem}/>
-                            </div>
+                        <div class="ContentCenter">
+                            <AddOneColl addOneColl={this.addOneColl}/>
+                        </div>
+                        <div class="ContentCenter">
+                            <ListAllColl
+                                addOneColl={this.props.addOneColl}
+                                addItemToColl={this.props.addItemToColl}
+                                selectOneColl={this.props.selectOneColl}
+                                dropOneColl={this.props.dropOneColl}
+                            />
+                        </div>
+                        <div class="ContentLeft" style={{marginTop:'40px'}}>
+                            <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem}/>
                         </div>
                     </div>
                 </div>
@@ -69,11 +70,8 @@ class Homectrl extends React.Component {
         } else {
             return (
                 <div className="container">
-                    <div className="Content title" style={{marginBottom:"1000px"}}>
-                        <h3>
-                            {this.state.wording.title}
-                        </h3>
-                        <h2> Not authorized go back !</h2>
+                    <div className="Content title" style={{marginBottom:"20px"}}>
+                        <ListItemsFromAllColl/>
                     </div>
                 </div>
             );
