@@ -9,15 +9,8 @@ var DB = {};
 // Connect
 mongoose.Promise = global.Promise;
 mongoose.connection.once('open', () => {
-	console.log('Connected !\n');
 	DB = mongoose.connection.db;
-	var funcs = [];
-	for(var name in DB) {
-		if(typeof DB[name] === 'function') {
-		    funcs.push(name)
-		}
-	};
-	console.log('\n\nDatabase methods: ', funcs, '\n\nWe are in business... \n');
+	console.log('\n\nWe are in business... \n');
 });
 
 const forbiddenCollections = ['users', 'sessions', 'netpost', 'dropboxImages', 'netvibesArticles', 'InstagramPosts', 'system.indexes'];
@@ -69,7 +62,7 @@ var ListAllItemsFromAllColl = (req, res, next) => {
 // init
 var ListAllColl = (req, res, next) => {
 	return new Promise((resolve, reject) => {
-		if (!req.session.userId) return protectRoute(next);
+		if (!req.session.userId && !req.query.dev) return protectRoute(next);
 		DB.listCollections().toArray((err, doc) => {
 			if (err) return next(reject(err));
 			resolve(res.json(removeColl(doc)));

@@ -4,7 +4,7 @@ import { createLogger } from "redux-logger";
 import thunk from "redux-thunk"
 import promise from "redux-promise-middleware"
 
-import reducer from "./Components/Reducers"
+import reducer from "./Reducers"
 
 const middleware = process.env.NODE_ENV === 'dev' ?
       applyMiddleware(promise(), thunk, createLogger()) :

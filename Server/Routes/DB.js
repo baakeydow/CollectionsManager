@@ -7,7 +7,7 @@ const router = express.Router();
 router.route('/list').get((req, res, next) => {
     DbLinkController.ListAllColl(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('listCollections called !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -17,7 +17,7 @@ router.route('/list').get((req, res, next) => {
 router.route('/listall').get((req, res, next) => {
     DbLinkController.ListAllItemsFromAllColl(req, res, next)
     .then((data) => {
-      console.log('oO');
+      console.log('all items from all Collections have been returned to the client !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -27,7 +27,7 @@ router.route('/listall').get((req, res, next) => {
 router.route('/getdbcoll').post((req, res, next) => {
     DbLinkController.GetOneDbColl(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('Collection\'s content returned to client !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -37,7 +37,7 @@ router.route('/getdbcoll').post((req, res, next) => {
 router.route('/adddbcoll').post((req, res, next) => {
     DbLinkController.AddDbColl(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('Collection added !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -47,7 +47,7 @@ router.route('/adddbcoll').post((req, res, next) => {
 router.route('/dropdbcoll').post((req, res, next) => {
     DbLinkController.DropDbColl(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('db dropped !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -57,7 +57,7 @@ router.route('/dropdbcoll').post((req, res, next) => {
 router.route('/additem').post((req, res, next) => {
     DbLinkController.AddItem(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('item added !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -67,7 +67,7 @@ router.route('/additem').post((req, res, next) => {
 router.route('/updateitem').post((req, res, next) => {
     DbLinkController.UpdateItem(req, res, next)
     .then((data) => {
-      console.log('success');
+      console.log('item updated !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })
@@ -77,7 +77,7 @@ router.route('/updateitem').post((req, res, next) => {
 router.route('/delitem').post((req, res, next) => {
     DbLinkController.DelOneItem(req, res, next)
     .then((data) => {
-      console.log('success !');
+      console.log('item deleted !');
     }).catch((err) => {
       console.log('here is the Error: \n\n', err);
     })

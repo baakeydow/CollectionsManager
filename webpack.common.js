@@ -4,10 +4,11 @@ const debug = process.env.NODE_ENV !== "production";
 console.log(process.env.NODE_ENV);
 
 const appEntry = debug ? [
+   'babel-polyfill',
    path.join(__dirname, 'Src', 'index.js'),
    'webpack-dev-server/client?http://localhost:8080',
    'webpack/hot/only-dev-server'
-] : path.join(__dirname, 'Src', 'index.js');
+] : ['babel-polyfill', path.join(__dirname, 'Src', 'index.js')];
 
 console.log(appEntry);
 

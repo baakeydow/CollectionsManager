@@ -1,4 +1,3 @@
-const mongoose			= require('mongoose');
 const User          = require('./models/user');
 
 // Create User
@@ -32,7 +31,6 @@ var LoginRegister = (req, res, next) => {
             });
 
         } else if (req.body.logemail && req.body.logpassword) {
-        	var coll = mongoose.connection.db.collection('users');
             User.authenticate(req.body.logemail, req.body.logpassword, (error, user) => {
                 if (error || !user) {
                     var err = new Error('Wrong email or password.');

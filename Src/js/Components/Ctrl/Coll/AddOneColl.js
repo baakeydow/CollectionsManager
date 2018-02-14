@@ -22,12 +22,14 @@ class AddColl extends React.Component {
         });
         event.preventDefault();
     }
+
     checkInput(input) {
         var letters = /^[A-Za-z]+$/;
         if (input.length < 11 && input.match(letters))
             return true;
         return false;
     }
+
     addColl(event) {
         if (this.checkInput(this.state.form.name)) {
             this.props.addOneColl(this.state.form.name.toUpperCase());
@@ -39,7 +41,7 @@ class AddColl extends React.Component {
 
     render() {
         return (
-            <form className="addOneColl" onSubmit={this.addColl}>
+            <form className="addOneForm" onSubmit={this.addColl}>
                 <div className="inputBtn">
                     <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="TechLinks"/>
                     <button type="submit" className="btn btn-success">ADD</button>

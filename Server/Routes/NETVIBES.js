@@ -183,7 +183,7 @@ router.get('/articles', (req, res, next) => {
 
 router.get('/instagram', (req, res, next) => {
 	var coll = DB.collection("InstagramPosts");
-	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+	getPage(coll, req.query.start, req.query.limit, { _id: -1 })
 	.then((doc) => {
 		res.json(doc);
 	}).catch((err) => {

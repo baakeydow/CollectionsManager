@@ -3,6 +3,11 @@ import { compose } from 'redux';
 import { connect } from "react-redux";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroller';
+import {
+    asyncForEach,
+    checkAvailability
+} from "../../../Utils/Custom";
+import InstaPost from './InstaPost';
 
 class GetInstagramPost extends React.Component {
     constructor(props) {
@@ -14,8 +19,6 @@ class GetInstagramPost extends React.Component {
             hasMore: true
         };
         this.getThemPost = this.getThemPost.bind(this);
-        this.deletePost = this.deletePost.bind(this);
-        this.getEmbed = this.getEmbed.bind(this);
     }
 
     getThemPost() {
@@ -36,8 +39,21 @@ class GetInstagramPost extends React.Component {
                 });
             } else {
                 var items = this.state.items;
-                response.data.forEach((data) => {
-                     items.push(data)
+                asyncForEach(response.data, async (data) => {
+                    if (checkAvailability(data.post.link)) {
+                        items.push(data);
+                    } else if (this.props.user.userId) {
+                        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/delinstagram' : '/netvibesdata/delinstagram';
+                        axios({
+                            method: 'post',
+                            url: url,
+                            data: {
+                                id: data._id,
+                                userId: this.props.user.userId
+                            }
+                        });
+                        console.log('item deleted ...');
+                    }
                 })
                 this.setState({
                     items: items,
@@ -54,48 +70,7 @@ class GetInstagramPost extends React.Component {
         })
     }
 
-    deletePost(id) {
-        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/delinstagram' : '/netvibesdata/delinstagram';
-
-        axios({
-            method: 'post',
-            url: url,
-            data: {
-                id: id,
-                userId: this.props.user.userId
-            }
-        })
-        .then((response) => {
-            this.setState({
-                items: response.data
-            });
-        })
-        .catch((err) => {
-            console.log('ERROR! : ', err);
-            this.setState({
-                items: err
-            });
-        })
-    }
-
-    getEmbed(item) {
-        var url = "https://api.instagram.com/oembed?url=" + item.post.link + "?omitscript=true";
-        var el = document.getElementById(item.post.id);
-        return axios({
-            method: 'get',
-            url: url
-        })
-        .then((response) => {
-            el.innerHTML = response.data.html;
-            instgrm.Embeds.process();
-        })
-        .catch((err) => {
-            console.log('ERROR! : ', err);
-        })
-    }
-
     componentWillMount() {
-        this.getThemPost();
         const script = document.createElement("script");
         script.src = "//platform.instagram.com/en_US/embeds.js";
         script.async = true;
@@ -106,24 +81,12 @@ class GetInstagramPost extends React.Component {
         var { items } = this.state;
         var posts = [];
         if (items && items[0]) {
-            console.log(items);
             items.map((item, i) => {
-                var delButton = (this.props.user.userId || process.env.NODE_ENV === 'dev')  ?
-                <button style={{margin:"10px"}} className="btn-danger" onClick={this.deletePost.bind(this, item._id)}>delete</button>
-                :
-                "";
                 posts.push(
-                    <div className="ListAllColl" key={i}>
-                        <h4>{item.post.content}</h4>
-                        <div id={item.post.id} className="ImageContentCenter">
-                            <img src={item.post.image} alt="Image deleted !" onClick={this.getEmbed.bind(this, item)}/>
-                        </div>
-                        <div className="ContentRight">
-                            {delButton}
-                            <a href={item.post.link} target="_blank">VIEW MORE !</a>
-                        </div>
-                        <hr style={{borderWidth:'4px', borderColor:"#353536"}}/>
-                    </div>
+                    <InstaPost
+                        item={item}
+                        i={i}
+                    />
                 );
             })
         }

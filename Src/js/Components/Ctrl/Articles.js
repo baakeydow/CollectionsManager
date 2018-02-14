@@ -1,5 +1,5 @@
 import React from "react";
-import GetNetvibesArticles from "../Netvibes/GetNetvibesArticles";
+import GetNetvibesArticles from "./Netvibes/GetNetvibesArticles";
 
 export default class ArticlesCtrl extends React.Component {
 

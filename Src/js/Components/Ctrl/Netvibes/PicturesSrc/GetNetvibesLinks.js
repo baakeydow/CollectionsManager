@@ -86,8 +86,8 @@ class GetNetvibesLinks extends React.Component {
                 :
                 "";
                 imageLinks.push(
-                    <div className="ListAllColl">
-                    <div className="ImageContentCenter" key={i}>
+                    <div className="ListAllColl" key={i}>
+                    <div className="ImageContentCenter">
                         <img src={item.link} alt="image deleted !" />
                     </div>
                     <div className="ContentRight">

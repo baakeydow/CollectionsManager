@@ -1,7 +1,7 @@
 import React from "react";
-import ImagesNetvibesLinks from "../Netvibes/PicturesSrc/GetNetvibesLinks";
-import ImagesNetvibesInstagram from "../Netvibes/PicturesSrc/GetNetvibesInstagram";
-import ImagesNetvibesDropbox from "../Netvibes/PicturesSrc/GetNetvibesDropbox";
+import ImagesNetvibesLinks from "./Netvibes/PicturesSrc/GetNetvibesLinks";
+import ImagesNetvibesInstagram from "./Netvibes/PicturesSrc/GetNetvibesInstagram";
+import ImagesNetvibesDropbox from "./Netvibes/PicturesSrc/GetNetvibesDropbox";
 
 export default class ImagesCtrl extends React.Component {
 

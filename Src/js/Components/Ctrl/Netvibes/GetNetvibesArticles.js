@@ -90,7 +90,7 @@ class GetNetvibesLinks extends React.Component {
                 articles.push(
                     <div className="ListAllArticles" key={i}>
                         <h4>{item.title}</h4>
-                        <div className="ContentLeft ImageContentCenter">
+                        <div className="ImageContentCenter">
                             <div>{ReactHtmlParser(item.content)}</div>
                         </div>
                         <div className="ContentRight">

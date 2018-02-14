@@ -8,7 +8,9 @@ node_modules
 Public/client.min.js
 
 # misc
+logHistory.log
 Public/folder/
+Public/up/
 .DS_Store
 .env.local
 .env.development.local

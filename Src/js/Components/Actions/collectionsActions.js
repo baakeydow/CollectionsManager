@@ -3,7 +3,7 @@ import axios from "axios";
 export function fetchAllCollections() {
   return function(dispatch) {
     dispatch({type: "FETCH_COLLECTIONS"});
-    var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/list' : '/db/list';
+    var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/list/?dev=true' : '/db/list';
 
       axios({
         method: 'get',

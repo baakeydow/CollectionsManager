@@ -30,20 +30,24 @@ export default class ContactCtrl extends React.Component {
   }
 
   handleSubmit() {
-      axios({
-        method: 'post',
-        url: '/contact',
-        data: {
-          name: sanitizeHtml(this.state.form.name),
-          email: sanitizeHtml(this.state.form.email),
-          message: sanitizeHtml(this.state.form.message)
-        }
-      }).then(function (response) {
-        console.log(response);
-      }.bind(this))
-      .catch(function (error) {
-        console.log(error);
-      });
+      if (this.state.form.name &&
+          this.state.form.email &&
+          this.state.form.message) {
+          axios({
+            method: 'post',
+            url: process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/contact' : '/contact',
+            data: {
+              name: sanitizeHtml(this.state.form.name),
+              email: sanitizeHtml(this.state.form.email),
+              message: sanitizeHtml(this.state.form.message)
+            }
+          }).then(function (response) {
+            console.log(response);
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
   }
 
   componentWillMount() {
@@ -69,8 +73,8 @@ export default class ContactCtrl extends React.Component {
           <div className="Content title">
               <h3>{this.state.wording.title}</h3>
               <div style={{marginTop:'40px'}} className="row">
-                  <div className="col-xs-6 col-md-4">
-                    yo
+                  <div className="col-md-4">
+                    <p>yo</p>
                   </div>
                   <div className="col-xs-12 col-md-8 formContact">
                       <form onSubmit={this.handleSubmit}>

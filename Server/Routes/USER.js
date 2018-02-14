@@ -40,8 +40,11 @@ router.post('/out', (req, res, next) => {
         return res.redirect('/');
     }
 });
+router.post('/contact', (req, res, next) => {
+    res.json('allright');
+});
 router.get('/', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+    res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/home', (req, res, next) => {
     DbUserController.FindUser(req, res, next)
@@ -59,28 +62,23 @@ router.get('/home', (req, res, next) => {
     })
 });
 router.get('/contact*', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+    res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/articles*', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+router.get('/articles', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/images*', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+router.get('/images', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/admin', (req, res, next) => {
-  return next(new Error('Are you this much serious ? well try again you might find some'));
+    return next(new Error('Are you this much serious ? well try again you might find some'));
 });
 router.get('/user/*', (req, res, next) => {
-  return next(new Error('ok try again...'));
-});
-router.get('/*', (req, res, next) => {
-  var err = new Error("whats going on ?");
-  err.status = err.status || 418;
-  return next(err);
+    return next(new Error('ok try again...'));
 });
 router.use((err, req, res, next) => {
     console.log('\\o/ Waddup ?:', err);
-  return next(err);
+    return next(err);
 });
 
 module.exports = router;

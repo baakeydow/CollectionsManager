@@ -15,6 +15,7 @@ class Item extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.updateItem = this.updateItem.bind(this);
     }
+
     updateItem(item) {
         if (this.state.item.desc || this.state.item.url || this.state.item.belongsTo) {
             var data = {
@@ -48,6 +49,7 @@ class Item extends React.Component {
             });
         }
     }
+
     handleChange(event) {
         this.setState({
             item: {
@@ -61,6 +63,7 @@ class Item extends React.Component {
         this.state.item.belongsTo = "";
         event.preventDefault();
     }
+
     render() {
         var { item } = this.props;
         var desc = this.state.item.desc ? this.state.item.desc : item.link.desc;

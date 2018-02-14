@@ -17,7 +17,7 @@ import {
 } from "./Components/Actions/collectionsActions";
 
 import { getCred, findUser } from "./Components/Actions/userActions";
-import { getLg } from "./Components/XINIT/wordingActions";
+import { getLg } from "./XINIT/wordingActions";
 
 import Layout from "./Components/Layout/Layout";
 
@@ -35,6 +35,7 @@ class App extends Component {
             wording: {},
             lang: 'EN'
         };
+        this.displayAllColl = this.displayAllColl.bind(this);
         this.changeLang = this.changeLang.bind(this);
         this.addOneColl = this.addOneColl.bind(this);
         this.selectOneColl = this.selectOneColl.bind(this);
@@ -42,7 +43,6 @@ class App extends Component {
         this.addItem = this.addItem.bind(this);
         this.delItem = this.delItem.bind(this);
         this.updateItem = this.updateItem.bind(this);
-        this.props.dispatch(fetchAllCollections());
         this.props.dispatch(findUser());
         this.props.dispatch(getLg(this.state.lang));
         console.log('Constructed !!!!');
@@ -61,6 +61,10 @@ class App extends Component {
 
     selectOneColl(data) {
         this.props.dispatch(fetchOneCollection(data));
+    }
+
+    displayAllColl() {
+        this.props.dispatch(fetchAllCollections());
     }
 
     dropOneColl(data) {
@@ -98,6 +102,7 @@ class App extends Component {
                     <div className="bckg">
                         <Route path='/home' render={routeProps =>
                         <HomeCtrl {...routeProps}
+                            displayAllColl={this.displayAllColl}
                             selectOneColl={this.selectOneColl}
                             addOneColl={this.addOneColl}
                             dropOneColl={this.dropOneColl}
