@@ -5,10 +5,10 @@ console.log(process.env.NODE_ENV);
 
 const appEntry = debug ? [
    'babel-polyfill',
-   path.join(__dirname, 'Src', 'index.js'),
+   path.join(__dirname, 'index.js'),
    'webpack-dev-server/client?http://localhost:8080',
    'webpack/hot/only-dev-server'
-] : ['babel-polyfill', path.join(__dirname, 'Src', 'index.js')];
+] : ['babel-polyfill', path.join(__dirname, 'index.js')];
 
 console.log(appEntry);
 
