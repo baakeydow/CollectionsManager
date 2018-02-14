@@ -5,8 +5,10 @@ See => CollectionsManager/Src/js/App.js
 
 **Init**
 `mkdir -p Public/folder/website ; mkdir Public/up ; mongorestore data`
+
 **webpack-dev-server**
 `yarn && npm start`
+
 **nodejs**
 `cd Server && yarn && npm run dev`
 
