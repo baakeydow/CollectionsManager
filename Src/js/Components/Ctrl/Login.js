@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom';
 
-class WelcomePage extends React.Component {
+class Login extends React.Component {
 
   constructor(props) {
     super(props);
@@ -56,7 +56,7 @@ class WelcomePage extends React.Component {
     if (this.state.user && this.state.user.userId) {
         return (
             <Redirect to={{
-                pathname: '/home',
+                pathname: '/',
             }}/>
         )
     }
@@ -89,4 +89,4 @@ class WelcomePage extends React.Component {
 export default compose(connect(state => ({
   wording: state.lang.wording.welcome,
   user: state.user.user
-}))(WelcomePage));
+}))(Login));

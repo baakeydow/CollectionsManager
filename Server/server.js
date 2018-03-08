@@ -7,6 +7,7 @@ const bodyParser 		= require('body-parser');
 const cookieParser		= require('cookie-parser');
 const helmet 			= require('helmet')
 const serveIndex		= require('serve-index');
+const mds               = require('markdown-serve');
 const mongoose			= require('mongoose');
 const multer			= require('multer');
 const DB				= require('./Routes/DB');
@@ -48,7 +49,7 @@ var logIp				= function(req, message) {
 		 req.connection.remoteAddress ||
 		 req.socket.remoteAddress ||
 		 req.connection.socket.remoteAddress;
-    if (req.session.userId === '') {
+    if (req.session.userId === 'yourUserId') {
         return;
     }
 	console.log('X============IP==============X');
@@ -63,7 +64,7 @@ var logIp				= function(req, message) {
 var allowXSS			= (req, res, next) => {
 	if ('GET' == req.method) {
 		var location = url.parse(req.url).pathname;
-		var logIfFrom = ['/', '/home', '/articles', '/images', '/up', '/contact', '/4242'];
+		var logIfFrom = ['/', '/home', '/articles', '/media', '/up', '/contact', '/4242', '/cheatsheet'];
 		if (logIfFrom.includes(location)) {
 			logIp(req);
 		}
@@ -98,15 +99,28 @@ mongoose.connection.once('open', () => {
 });
 //use sessions for tracking logins
 app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection
-  })
+    secret: 'work hard',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    },
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    })
 }));
 app.use(allowXSS);
 app.use(express.static(path.join(__dirname, '..', 'Public')));
+app.set('views', path.join(__dirname, '..', 'Public', 'snippets'));
+app.set('view engine', 'jade');
+app.use('/cheatsheet', mds.middleware({
+    rootDirectory: path.join(__dirname, '..', 'Public', 'snippets'),
+    handler: (markdownFile, req, res, next) => {
+        if (req.method !== 'GET') next();
+        var title = markdownFile.meta && markdownFile.meta.title ? markdownFile.meta.title : "Welcome";
+        res.render('markdown', { title: title, content: markdownFile.parseContent() });
+    }
+}));
 app.use('/4242', auth.connect(basic), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
 app.use('/up/*', function (req, res, next) {
 	if (!req.session.userId) {
@@ -122,7 +136,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
-// app.disable('x-powered-by'); // handled by helmet
+app.disable('x-powered-by'); // handled by helmet ? hmmm... not quite the case actually
 
 app.use('/files', upload.single('file'), FILES);
 

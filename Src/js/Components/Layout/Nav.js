@@ -10,25 +10,6 @@ export default class Nav extends React.Component {
       wording: props.navProps.wording,
       lang: props.navProps.lang
     };
-    this.logOut = this.logOut.bind(this);
-  }
-
-  logOut() {
-    if (this.props.navProps.user &&
-        this.props.navProps.user.userId) {
-        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/out' : '/out';
-        axios({
-            method: 'post',
-            url: url
-        })
-        .then((response) => {
-            console.log("user logged out");
-            window.location.reload();
-        })
-        .catch((err) => {
-            console.log('ERROR! : ', err);
-        })
-    }
   }
 
   toggleCollapse() {
@@ -52,10 +33,10 @@ export default class Nav extends React.Component {
   render() {
     const { location } = this.props;
     const { collapsed } = this.state;
-    const homeClass = location.pathname === "/home" ? "active" : "";
+    const homeClass = location.pathname === "/" ? "active" : "";
     const articleClass = location.pathname.match(/^\/articles/) ? "active" : "";
     const contactClass = location.pathname.match(/^\/contact/) ? "active" : "";
-    const imagesClass = location.pathname.match(/^\/images/) ? "active" : "";
+    const imagesClass = location.pathname.match(/^\/media/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
     const navStyle = {
         backgroundColor: "#353536"
@@ -70,7 +51,6 @@ export default class Nav extends React.Component {
     };
     let wording = this.state.wording;
     let lang = this.props.navProps.lang === 'EN' ? "FR" : "EN";
-    let btnState = this.props.navProps.user.userId ? "Log out" : "Log in";
 
     return (
       <nav style={navStyle} className="navbar navbar-inverse navbar-fixed-top">
@@ -90,19 +70,16 @@ export default class Nav extends React.Component {
           <div className={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
               <li className={homeClass}>
-                <NavLink to="/home" onClick={this.toggleCollapse.bind(this)}>{wording.home.title}</NavLink>
+                <NavLink to="/" onClick={this.toggleCollapse.bind(this)}>{wording.home.title}</NavLink>
+              </li>
+              <li className={imagesClass}>
+                <NavLink to="/media" onClick={this.toggleCollapse.bind(this)}>{wording.media.title}</NavLink>
               </li>
               <li className={articleClass}>
                 <NavLink to="/articles" onClick={this.toggleCollapse.bind(this)}>{wording.articles.title}</NavLink>
               </li>
-              <li className={imagesClass}>
-                <NavLink to="/images" onClick={this.toggleCollapse.bind(this)}>{wording.images.title}</NavLink>
-              </li>
               <li className={contactClass}>
                 <NavLink to="/contact" onClick={this.toggleCollapse.bind(this)}>{wording.contact.title}</NavLink>
-              </li>
-              <li style={{width:'200px', height:"50px"}}>
-                <NavLink style={{float:'right'}} to="/"><button onClick={this.logOut}>{btnState}</button></NavLink>
               </li>
             </ul>
           </div>

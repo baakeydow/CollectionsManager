@@ -12,13 +12,19 @@ class GetNetvibesLinks extends React.Component {
             items: [],
             start: 0,
             count: 10,
-            hasMore: true
+            hasMore: false
         };
         this.getThemArticles = this.getThemArticles.bind(this);
         this.deleteArticle = this.deleteArticle.bind(this);
     }
 
     getThemArticles() {
+        if (!this.state.hasMore) {
+            this.setState({
+                hasMore: true
+            });
+            return;
+        };
         var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/articles' : '/netvibesdata/articles';
         const params = {
             start: this.state.start,
@@ -78,6 +84,12 @@ class GetNetvibesLinks extends React.Component {
         })
     }
 
+    componentDidMount() {
+        setTimeout(() => {
+            this.getThemArticles();
+        }, 1000);
+    }
+
     render() {
         var { items } = this.state;
         var articles = [];
@@ -90,20 +102,20 @@ class GetNetvibesLinks extends React.Component {
                 articles.push(
                     <div className="ListAllArticles" key={i}>
                         <h4>{item.title}</h4>
-                        <div className="ImageContentCenter">
-                            <div>{ReactHtmlParser(item.content)}</div>
+                        <div className="ImageContentCenterWithText">
+                            <div className="ArticlesContainer" >{ReactHtmlParser(item.content)}</div>
                         </div>
                         <div className="ContentRight">
                             {delButton}
                             <a href={item.link} target="_blank">READ MORE !</a>
                         </div>
-                        <hr style={{borderWidth:'4px', borderColor:"#353536"}}/>
+                        <hr style={{borderWidth:'4px', borderColor:"#314477"}}/>
                     </div>
                 );
             })
         }
         if (!articles.length) {
-            articles = <p>No Articles !</p>
+            articles = <p>Articles incomming !</p>
         }
         return (
             <div className="mappedLinksCollWithImages">

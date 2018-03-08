@@ -1,9 +1,9 @@
 import React from "react";
-import ImagesNetvibesLinks from "./Netvibes/PicturesSrc/GetNetvibesLinks";
-import ImagesNetvibesInstagram from "./Netvibes/PicturesSrc/GetNetvibesInstagram";
-import ImagesNetvibesDropbox from "./Netvibes/PicturesSrc/GetNetvibesDropbox";
+import ImagesNetvibesLinks from "./Netvibes/Media/GetNetvibesLinks";
+import NetvibesInstagram from "./Netvibes/Media/GetNetvibesInstagram";
+import ImagesNetvibesDropbox from "./Netvibes/Media/GetNetvibesDropbox";
 
-export default class ImagesCtrl extends React.Component {
+export default class MediaCtrl extends React.Component {
 
   constructor(props) {
     super(props);
@@ -28,11 +28,12 @@ export default class ImagesCtrl extends React.Component {
     return (
         <div className="container">
             <div className="Content title">
-                <h3>{this.props.wording.title}</h3>
+                <h2>{this.props.wording.title}</h2>
+                <h3>Images from Articles</h3>
                 <ImagesNetvibesLinks/>
                 <h3>Instagram</h3>
-                <ImagesNetvibesInstagram/>
-                <h3>DropBox</h3>
+                <NetvibesInstagram/>
+                <h3>Images from Dropbox</h3>
                 <ImagesNetvibesDropbox/>
             </div>
         </div>

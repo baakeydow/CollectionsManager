@@ -103,13 +103,36 @@
     justify-content: center;
     align-items: center;
 }
+.ImageContentCenterWithText {
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+.ArticlesContainer {
+    display: flex;
+    flex-direction: column;
+}
+.ImageContentCenterWithText img {
+    height:auto;
+    max-width:  100%;
+	margin: 10px 0 30px 0;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+	object-fit: scale-down;
+}
 .ImageContentCenter img {
-    position: relative;
-    float:left;
+    height:auto;
     width:  100%;
     background-position: 50% 50%;
     background-repeat:   no-repeat;
     background-size:     cover;
+}
+.ImageContentCenterWithText iframe {
+    max-width: 100%;
+}
+.ImageContentCenter iframe {
+    max-width: 0;
 }
 .ContentLeft {
     display: flex;
@@ -120,6 +143,12 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+.ContentRightInstaLegend {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .ContentCenter.WelcomePage {
     margin-top: 40px;
@@ -188,6 +217,17 @@ div#app {
     display: none;
 }
 
+.ListMedia {
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 670px;
+    margin: 0 auto;
+}
+.ListMedia .ImageContentCenter iframe {
+    max-width: 400px !important;
+    margin: 0px !important;
+}
 .ListAllColl {
     display: grid;
     flex-wrap: wrap;
@@ -202,6 +242,7 @@ div#app {
 }
 .ListAllArticles .ContentRight a {
     padding-right: 20px;
+    color: #801010;
 }
 .ListAllCollections {
     display: flex;

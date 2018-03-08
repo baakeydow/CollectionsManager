@@ -1,14 +1,15 @@
 import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import axios from "axios";
+import InputFile from "../Utils/FileInput";
 import AddOneColl from "./Coll/AddOneColl";
 import ListAllColl from "./Coll/ListAllColl";
 import ListItemsFromColl from "./Coll/ListItemsFromColl";
 import ListItemsFromAllColl from "./Coll/ListItemsFromAllColl";
 
-class Homectrl extends React.Component {
+class Linksctrl extends React.Component {
 
     constructor(props) {
         super(props);
@@ -19,6 +20,7 @@ class Homectrl extends React.Component {
         };
         this.addOneColl = this.addOneColl.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.logOut = this.logOut.bind(this);
     }
 
     componentWillMount() {
@@ -34,8 +36,26 @@ class Homectrl extends React.Component {
         this.props.addOneColl(data);
     }
 
+    logOut() {
+      if (this.props.user &&
+          this.props.user.userId) {
+          var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/out' : '/out';
+          axios({
+              method: 'get',
+              url: url
+          })
+          .then((response) => {
+              console.log("user logged out");
+              window.location.reload();
+          })
+          .catch((err) => {
+              console.log('ERROR! : ', err);
+          })
+      }
+    }
+
     handleSubmit(e) {
-        const file = document.getElementById('file').files[0];
+        const file = document.getElementById('file').files[0] || e.target.files[0];
         var bodyFormData = new FormData();
         bodyFormData.set('file', file);
         axios({
@@ -63,6 +83,7 @@ class Homectrl extends React.Component {
 
     render() {
         var { user, collections } = this.state;
+        let btnState = user.userId ? "Log out" : "Log in";
         if (user.userId || process.env.NODE_ENV === 'dev') {
             return (
                 <div className="container">
@@ -72,14 +93,20 @@ class Homectrl extends React.Component {
                         </h3>
                         <div class="ContentLeft">
                             <form className="addOneForm">
-                                <label tabIndex="1" role="button" className="btn btn-success" for="file">
+                                <label className="btn btn-success" for="file">
                                 Add File !
                                 <input onChange={this.handleSubmit} className="hidden" type="file" id="file" name="file"/>
                                 </label>
                             </form>
                         </div>
+                        <div class="addOneForm">
+                            <InputFile className="btn btn-success" name="fileInput" onChange={this.handleSubmit} />
+                        </div>
                         <div class="ContentLeft">
                             <AddOneColl addOneColl={this.addOneColl}/>
+                            <btn style={{width:'200px', height:"50px"}}>
+                              <NavLink style={{float:'right'}} to="/"><button onClick={this.logOut}>{btnState}</button></NavLink>
+                            </btn>
                         </div>
                         <div class="ContentCenter">
                             <ListAllColl
@@ -112,4 +139,4 @@ export default compose(connect(state => ({
     user: state.user.user,
     collections: state.collections.collections,
     coll: state.collections.coll
-}))(Homectrl));
+}))(Linksctrl));

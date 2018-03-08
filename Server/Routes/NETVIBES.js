@@ -182,6 +182,7 @@ router.get('/articles', (req, res, next) => {
 });
 
 router.get('/instagram', (req, res, next) => {
+	if (!req.session.userId && !req.query.dev) return protectRoute(next);
 	var coll = DB.collection("InstagramPosts");
 	getPage(coll, req.query.start, req.query.limit, { _id: -1 })
 	.then((doc) => {

@@ -8,8 +8,8 @@ const Hello = {
   articles: {
     title: "Articles"
   },
-  images: {
-    title: "Pictures"
+  media: {
+    title: "Media"
   },
   contact: {
     title: "Contact Us",
@@ -31,8 +31,8 @@ const Bonjour = {
   articles: {
     title: "Nos Articles"
   },
-  images: {
-    title: "Images"
+  media: {
+    title: "Media"
   },
   contact: {
     title: "Contactez Nous",

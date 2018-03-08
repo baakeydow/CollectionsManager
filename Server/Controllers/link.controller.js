@@ -14,6 +14,7 @@ mongoose.connection.once('open', () => {
 });
 
 const forbiddenCollections = ['users', 'sessions', 'netpost', 'dropboxImages', 'netvibesArticles', 'InstagramPosts', 'system.indexes'];
+const publicCollections = ['CODING', 'GAMES', 'HACK', 'JUSTLINKS', 'TECH', 'ML', 'MEDIA', 'BITCOINS', 'WIKIPEDIA', 'GAMES'];
 
 var removeColl = (coll) => {
 	var updated = [];
@@ -24,7 +25,6 @@ var removeColl = (coll) => {
 	})
 	return updated;
 }
-
 var protectRoute = (next) => {
 	var err = new Error('403 you need to authenticate yourself');
 	err.status = 403;
@@ -44,8 +44,10 @@ var ListAllItemsFromAllColl = (req, res, next) => {
 			var collections = removeColl(doc);
 			var promises = [];
 			collections.forEach((collection) => {
-				var coll = DB.collection(collection.name);
-				promises.push(coll.find().sort({ $natural: -1 }).toArray());
+				if (publicCollections.includes(collection.name)) {
+					var coll = DB.collection(collection.name);
+					promises.push(coll.find().sort({ $natural: -1 }).toArray());
+				}
 			});
 			resolved(promises);
 		});

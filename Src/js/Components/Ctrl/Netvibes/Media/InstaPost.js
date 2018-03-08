@@ -9,7 +9,7 @@ class InstaPosts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            postName: 'upload-0'
+            postName: ''
         };
         this.downLoadPost = this.downLoadPost.bind(this);
         this.deletePost = this.deletePost.bind(this);
@@ -32,13 +32,25 @@ class InstaPosts extends React.Component {
             url: url
         })
         .then((response) => {
+            if (response.status !== 200) {
+                console.log('#####################');
+                console.log(response);
+                console.log('#####################');
+                this.deletePost(item._id);
+                return;
+            }
             el.innerHTML = response.data.html;
             el.style.border = '7px ridge blueviolet';
             el.style.borderRadius = '10px';
+            el.style.padding = '6px';
+            el.style.display = 'grid';
             instgrm.Embeds.process();
+            setTimeout(() => {
+                el.style.width = 'auto';
+            }, 3000);
         })
         .catch((err) => {
-            console.log('ERROR! : ', err);
+            this.deletePost(item._id);
         })
     }
 
@@ -62,6 +74,20 @@ class InstaPosts extends React.Component {
         })
     }
 
+    sendPost(item) {
+        axios({
+            method: 'post',
+            url: 'https://www.thehottestgirlsofinstagram.com/media/instagram',
+            data: [item]
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((err) => {
+            console.log('ERROR! send post failed: ', err);
+        })
+    }
+
     deletePost(id) {
         var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/delinstagram' : '/netvibesdata/delinstagram';
 
@@ -74,6 +100,7 @@ class InstaPosts extends React.Component {
             }
         })
         .then((response) => {
+            console.log('item deleted !');
             this.setState({
                 items: response.data
             });
@@ -83,12 +110,13 @@ class InstaPosts extends React.Component {
         })
     }
 
-    componentDidMount() {
+    componentWillMount() {
         axios({
             method: 'get',
             url: this.props.item.post.image
         }).then((response) => {
-            if (response.status !== 200) {
+            if (this.props.item.post.type !== 'image' ||
+                response.status !== 200) {
                 this.getEmbed(this.props.item);
             }
         }).catch((err) => {
@@ -99,6 +127,10 @@ class InstaPosts extends React.Component {
     render() {
         var { item, i } = this.props;
         if (item) {
+            var sendButton = (this.props.user.userId || process.env.NODE_ENV === 'dev')  ?
+            <button style={{margin:"10px"}} className="btn-success" onClick={this.sendPost.bind(this, item)}>send</button>
+            :
+            "";
             var delButton = (this.props.user.userId || process.env.NODE_ENV === 'dev')  ?
             <button style={{margin:"10px"}} className="btn-danger" onClick={this.deletePost.bind(this, item._id)}>delete</button>
             :
@@ -113,12 +145,13 @@ class InstaPosts extends React.Component {
             :
             "";
             return (
-                <div className="ListAllColl" key={i}>
+                <div className="ListMedia" key={i} id={i}>
                     <h4>{truncateText(item.post.content)}</h4>
                     <div id={item.post.id} className="ImageContentCenter">
                         <img src={item.post.image} alt="you shouldn't be seing this..." onClick={this.getEmbed.bind(this, item)}/>
                     </div>
-                    <div className="ContentRight">
+                    <div className="ContentRightInstaLegend">
+                        {sendButton}
                         {delButton}
                         {inputPostName}
                         {upButton}

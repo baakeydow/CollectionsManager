@@ -27,14 +27,17 @@ router.post('/finduser', (req, res, next) => {
         res.json('user not logged In');
     }
 });
-router.post('/out', (req, res, next) => {
+router.get('/login', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../../Public/index.html'));
+});
+router.get('/out', (req, res, next) => {
     if (req.session) {
-        // delete session object
-        req.session.destroy((err) => {
-            if (err) return next(err);
-            console.log('session deleted !');
-            return res.redirect('/');
-        })
+		// delete session object
+		req.session.destroy((err) => {
+			if (err) return next(err);
+			console.log('session deleted !');
+			return res.redirect('/');
+		})
     } else {
         console.log('did not log out');
         return res.redirect('/');
@@ -44,9 +47,6 @@ router.post('/contact', (req, res, next) => {
     res.json('allright');
 });
 router.get('/', (req, res, next) => {
-    res.sendFile(path.join(__dirname, '../../Public/index.html'));
-});
-router.get('/home', (req, res, next) => {
     DbUserController.FindUser(req, res, next)
     .then((data) => {
         if (data) {
@@ -67,7 +67,7 @@ router.get('/contact*', (req, res, next) => {
 router.get('/articles', (req, res, next) => {
     res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
-router.get('/images', (req, res, next) => {
+router.get('/media', (req, res, next) => {
     res.sendFile(path.join(__dirname, '../../Public/index.html'));
 });
 router.get('/admin', (req, res, next) => {

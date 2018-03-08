@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import InfiniteScroll from 'react-infinite-scroller';
 import {
-    asyncForEach,
-    checkAvailability
+    asyncForEach
 } from "../../../Utils/Custom";
 import InstaPost from './InstaPost';
 
@@ -22,7 +21,8 @@ class GetInstagramPost extends React.Component {
     }
 
     getThemPost() {
-        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/instagram' : '/netvibesdata/instagram';
+        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/instagram/?dev=true' : '/netvibesdata/instagram';
+        var userId = this.props.user.userId;
         const params = {
             start: this.state.start,
             limit: this.state.count,
@@ -39,21 +39,9 @@ class GetInstagramPost extends React.Component {
                 });
             } else {
                 var items = this.state.items;
+                var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/delinstagram' : '/netvibesdata/delinstagram';
                 asyncForEach(response.data, async (data) => {
-                    if (checkAvailability(data.post.link)) {
-                        items.push(data);
-                    } else if (this.props.user.userId) {
-                        var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/netvibesdata/delinstagram' : '/netvibesdata/delinstagram';
-                        axios({
-                            method: 'post',
-                            url: url,
-                            data: {
-                                id: data._id,
-                                userId: this.props.user.userId
-                            }
-                        });
-                        console.log('item deleted ...');
-                    }
+                    items.push(data);
                 })
                 this.setState({
                     items: items,
@@ -86,17 +74,20 @@ class GetInstagramPost extends React.Component {
                     <InstaPost
                         item={item}
                         i={i}
+                        key={i}
                     />
                 );
             })
         }
         if (!posts.length) {
-            posts = <p>No Instagram Post !</p>
+            posts = <p>You are not allowed to see this you need to find how to log in</p>
         }
         return (
             <div className="mappedLinksCollWithImages">
                 <InfiniteScroll
                     pageStart={0}
+                    threshold={1500}
+                    key={this.state.count}
                     loadMore={this.getThemPost.bind(this)}
                     hasMore={this.state.hasMore}
                     loader={<div className="loader" key={0}>Loading ...</div>}

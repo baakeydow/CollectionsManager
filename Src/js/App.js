@@ -21,10 +21,10 @@ import { getLg } from "./XINIT/wordingActions";
 
 import Layout from "./Components/Layout/Layout";
 
-import WelcomePage from "./Components/Ctrl/WelcomePage";
-import HomeCtrl from "./Components/Ctrl/Home";
+import Login from "./Components/Ctrl/Login";
+import LinksCtrl from "./Components/Ctrl/Links";
 import ArticlesCtrl from "./Components/Ctrl/Articles";
-import ImagesCtrl from "./Components/Ctrl/Images";
+import MediaCtrl from "./Components/Ctrl/Media";
 import ContactCtrl from "./Components/Ctrl/Contact";
 
 class App extends Component {
@@ -98,10 +98,8 @@ class App extends Component {
             <Router history={HashRouter}>
                 <div id="app">
                     <Route path='/' render={routeProps => <Layout {...routeProps} user={this.props.user} lang={this.state.lang} wording={this.state.wording} onChange={this.changeLang}/>} />
-                    <Route exact path="/" render={routeProps => <WelcomePage {...routeProps}  wording={this.state.wording.welcome} getCred={getCred}/>} />
-                    <div className="bckg">
-                        <Route path='/home' render={routeProps =>
-                        <HomeCtrl {...routeProps}
+                    <Route exact path="/" render={routeProps =>
+                        <LinksCtrl {...routeProps}
                             displayAllColl={this.displayAllColl}
                             selectOneColl={this.selectOneColl}
                             addOneColl={this.addOneColl}
@@ -110,10 +108,10 @@ class App extends Component {
                             delItem={this.delItem}
                             updateItem={this.updateItem}/>}
                         />
-                        <Route path='/articles' render={routeProps => <ArticlesCtrl {...routeProps} wording={this.state.wording.articles}/>} />
-                        <Route path='/images' render={routeProps => <ImagesCtrl {...routeProps} wording={this.state.wording.images}/>} />
-                        <Route path='/contact' render={routeProps => <ContactCtrl {...routeProps} wording={this.state.wording.contact}/>} />
-                    </div>
+                    <Route path='/login' render={routeProps => <Login {...routeProps}  wording={this.state.wording.welcome} getCred={getCred}/>} />
+                    <Route path='/articles' render={routeProps => <ArticlesCtrl {...routeProps} wording={this.state.wording.articles}/>} />
+                    <Route path='/media' render={routeProps => <MediaCtrl {...routeProps} wording={this.state.wording.media}/>} />
+                    <Route path='/contact' render={routeProps => <ContactCtrl {...routeProps} wording={this.state.wording.contact}/>} />
                     <div className="Customfooter">
                     </div>
                 </div>

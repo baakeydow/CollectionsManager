@@ -74,7 +74,7 @@ export default class ContactCtrl extends React.Component {
               <h3>{this.state.wording.title}</h3>
               <div style={{marginTop:'40px'}} className="row">
                   <div className="col-md-4">
-                    <p>yo</p>
+                    <p>Do you have any suggestions ? please share ! I'll answer you ;)</p>
                   </div>
                   <div className="col-xs-12 col-md-8 formContact">
                       <form onSubmit={this.handleSubmit}>
