@@ -5,7 +5,7 @@ See => CollectionsManager/Src/js/App.js
 
 **Init**
 
-`mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data`
+`git clone https://github.com/bndao/CollectionsManager.git && cd CollectionsManager ; mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data`
 
 **webpack-dev-server**
 
@@ -17,4 +17,4 @@ See => CollectionsManager/Src/js/App.js
 
 ### Run Project (Prod)
 
-`mkdir -p Public/folder/website ; mkdir Public/up ; mongorestore data && yarn && npm run build && cd Server && yarn && npm run prod`
+`git clone https://github.com/bndao/CollectionsManager.git && cd CollectionsManager ; mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data && yarn && npm run build && cd Server && yarn && npm run prod`
