@@ -103,8 +103,54 @@ function getPage(collection, start, nb, sortQuery) {
 	});
 }
 
-router.get('/img', (req, res, next) => {
-	return protectRoute(next);
+router.get('/videos', (req, res, next) => {
+	const folder_path = path.join(__dirname, './../../Public/videoPlaylist/');
+	let availableVideos = [];
+	let re = new RegExp('\.mp4$');
+	fs.readdir(folder_path, (err, items) => {
+		if (err) return next();
+		for (var i=0; i<items.length; i++) {
+			if (re.exec(items[i])) {
+				availableVideos.push(items[i]);
+			}
+		}
+		res.json(availableVideos[Math.floor(Math.random()*availableVideos.length)]);
+	});
+});
+
+router.get('/play', (req, res, next) => {
+	const video_path = path.join(__dirname, './../../Public/videoPlaylist/' + req.query.video);
+	if (!fs.existsSync(video_path)) return next();
+	const stat = fs.statSync(video_path);
+	const fileSize = stat.size;
+	const range = req.headers.range;
+	if (range) {
+		const parts = range.replace(/bytes=/, "").split("-");
+		const start = parseInt(parts[0], 10);
+		const end = parts[1]
+		? parseInt(parts[1], 10)
+		: fileSize - 1;
+
+		const chunksize = (end - start) + 1;
+		const file = fs.createReadStream(video_path, {start, end});
+		const head = {
+			'Content-Range': `bytes ${start} - ${end} / ${fileSize}`,
+			'Accept-Ranges': 'bytes',
+			'Content-Length': chunksize,
+			'Content-Type': 'video/mp4'
+		};
+
+		res.writeHead(206, head);
+		file.pipe(res);
+	} else {
+		const head = {
+			'Content-Length': fileSize,
+			'Content-Type': 'video/mp4'
+		};
+		console.log('video played was asked directly from url source:', req.query.video);
+		res.writeHead(200, head);
+		fs.createReadStream(video_path).pipe(res);
+	}
 });
 
 

@@ -217,6 +217,18 @@ div#app {
     display: none;
 }
 
+.MediaPlayer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 670px;
+    margin: 0 auto;
+}
+.MediaPlayer video {
+    width: 80%;
+    margin-bottom: 30px;
+}
 .ListMedia {
     display: grid;
     flex-wrap: wrap;

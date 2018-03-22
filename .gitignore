@@ -9,6 +9,7 @@ Public/client.min.js
 
 # misc
 logHistory.log
+Public/videoPlaylist/
 Public/folder/
 Public/up/
 .DS_Store
@@ -20,3 +21,30 @@ Public/up/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+## PHP
+
+# Composer files
+composer.phar
+vendor/
+
+# Local configs
+config/autoload/*.local.php
+
+# Binary gettext files
+*.mo
+
+# Data
+data/logs/
+data/cache/
+data/sessions/
+data/tmp/
+temp/
+
+# Doctrine 2
+data/DoctrineORMModule/Proxy/
+data/DoctrineORMModule/cache/
+
+# Legacy ZF1
+demos/
+extras/documentation

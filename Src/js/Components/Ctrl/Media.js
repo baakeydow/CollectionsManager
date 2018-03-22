@@ -1,4 +1,5 @@
 import React from "react";
+import MediaPlayer from "../Utils/MediaPlayer";
 import ImagesNetvibesLinks from "./Netvibes/Media/GetNetvibesLinks";
 import NetvibesInstagram from "./Netvibes/Media/GetNetvibesInstagram";
 import ImagesNetvibesDropbox from "./Netvibes/Media/GetNetvibesDropbox";
@@ -29,6 +30,7 @@ export default class MediaCtrl extends React.Component {
         <div className="container">
             <div className="Content title">
                 <h2>{this.props.wording.title}</h2>
+                <MediaPlayer/>
                 <h3>Images from Articles</h3>
                 <ImagesNetvibesLinks/>
                 <h3>Instagram</h3>

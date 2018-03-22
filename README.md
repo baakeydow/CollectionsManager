@@ -5,7 +5,7 @@ See => CollectionsManager/Src/js/App.js
 
 **Init**
 
-`mkdir -p Public/folder/website ; mkdir Public/up ; mongorestore data`
+`mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data`
 
 **webpack-dev-server**
 
