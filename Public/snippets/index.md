@@ -34,6 +34,7 @@ layout: not defined yet :D
 
 ***# Checking/Fixing/Creating things***
 > ``` bash
+=> setup new user to a new db:
 CREATE USER 'news'@'localhost' IDENTIFIED BY 'newspass';
 CREATE DATABASE news;
 CREATE TABLE `news` (
@@ -49,7 +50,35 @@ GRANT ALL PRIVILEGES on news.* to 'news'@'localhost' IDENTIFIED BY 'newspass';
 FLUSH PRIVILEGES;
 SHOW GRANTS FOR 'news'@'localhost';
 mysqldump -u news -pnewspass --databases news > news.sql
+```
+> ``` bash
+=> mount ntfs to osx:
+brew install ntfs-3g
+diskutil list // (it finds disk2s1)
+sudo mkdir /Volumes/NTFS
+sudo /usr/local/bin/ntfs-3g /dev/disk2s1 /Volumes/NTFS -olocal -oallow_other
+```
+> ``` bash
+=> rtfm:
+find . \( -name '*~' -o -name '#*#' \) -print -delete
+groups $FT_USER | sed 's/ /,/g' | tr -d '\n'
+find . \( -name '*.sh' \) -print | sed 's/\(.*\)\///g' | sed 's/\.sh//g'
+( find . -type d && find . -type f ) | wc -l | sed 's/ //g'
+ifconfig | grep ether | sed 's/\(.*\)ether //g'
+ls -l | sed 'n;d'
+cat /etc/passwd | sed '/^#/d' | sed -n 'n;p' | sed 's/:\(.*\)//g' | rev | sort -r | awk 'NR >= ENVIRON["FT_LINE1"] && NR <= ENVIRON["FT_LINE2"]' | tr '\n' ' ' | sed 's/ /, /g' | sed 's/\(.*\), /\1./' | tr -d '\n'
+
+```
+> ``` bash
+=> misc:
+open -a atom -e file.txt
 rsync -alPvz $PWD/folderOrFileToSend [USER@]HOST:DEST
+find . -name 'iris*' -type f
+cut -d ',' -f 5 iris.csv
+tail -n 150 iris.csv | cut -d "," -f 5 | uniq -c
+awk '/setosa/ { print $0 }' iris.csv
+grep -i "vir" iris.csv
+sed 's/setosa/iris-setosa/g' iris.csv > output.csv
 tar -czf dump.tar.gz dump
 tar -xzvf gwsocket-0.2.tar.gz
 sudo dmidecode | grep -A3 '^System Information'
@@ -59,7 +88,6 @@ ss -tapn
 nmap -sP 192.168.1.0/24
 arp -a
 nmap -p 1-65535 -T4 -A -v ip_found
-sudo tailf /var/log/syslog
 du -hs .
 df -H
 lspci | grep VGA
@@ -73,6 +101,7 @@ lsusb
 w
 alias vfix="vagrant halt && vagrant up --provision"
 tailf /var/log/mongodb/mongodb.log
+sudo tailf /var/log/syslog
 sudo tailf /var/log/nginx/error.log
 ```
 

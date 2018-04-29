@@ -1,102 +1,25 @@
-const express 			= require('express');
-const path 				= require('path');
-const url 				= require('url');
-const http 				= require('http');
-const auth 				= require('http-auth');
-const bodyParser 		= require('body-parser');
-const cookieParser		= require('cookie-parser');
-const helmet 			= require('helmet')
-const serveIndex		= require('serve-index');
-const mds               = require('markdown-serve');
-const mongoose			= require('mongoose');
-const multer			= require('multer');
-const DB				= require('./Routes/DB');
-const USER				= require('./Routes/USER');
-const FILES				= require('./Routes/FILES');
-const NETVIBES			= require('./Routes/NETVIBES');
+const express = require('express');
+const path = require('path');
+const http = require('http');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet')
+const serveIndex = require('serve-index');
+const mds = require('markdown-serve');
+const DB = require('./Routes/DB');
+const USER = require('./Routes/USER');
+const FILES = require('./Routes/FILES');
+const NETVIBES = require('./Routes/NETVIBES');
+const Tools = require('./Utils/tools');
 
-var fs = require('fs');
-var util = require('util');
-var wa = process.env.NODE_ENV === 'dev' ? 'w' : 'a';
-var logFile = fs.createWriteStream(__dirname + "/logHistory.log", { flags: wa });
-var logStdout = process.stdout;
-console.log = function () {
-  logFile.write(util.format.apply(null, arguments) + '\n');
-  logStdout.write(util.format.apply(null, arguments) + '\n');
-}
-console.error = console.log;
+var env = new Tools();
+var upload = env.multerInstance('10MB');
 
-const app				= express();
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
-var session 			= require('express-session');
-var MongoStore			= require('connect-mongo')(session);
+var app = express();
 
-var storage 			= multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, '../Public/up');
-	},
-	filename: function (req, file, cb) {
-		cb(null, file.originalname);
-	}
-})
-
-var upload				= multer({ storage: storage, limits: { fileSize: '5MB' } });
-
-var logIp				= function(req, message) {
-	var location = url.parse(req.url).pathname;
-	var xfwd = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',').pop() : '';
-	var ip = xfwd ||
-		 req.connection.remoteAddress ||
-		 req.socket.remoteAddress ||
-		 req.connection.socket.remoteAddress;
-    if (req.session.userId === 'yourUserId') {
-        return;
-    }
-	console.log('X============IP==============X');
-	if (message) {
-		console.log(message);
-	}
-	console.log(req.headers);
-	console.log('Doftom here is the ip for ' + location + ' |=> ', ip);
-	console.log('X============IP==============X');
-};
-
-var allowXSS			= (req, res, next) => {
-	if ('GET' == req.method) {
-		var location = url.parse(req.url).pathname;
-		var logIfFrom = ['/', '/home', '/articles', '/media', '/up', '/contact', '/4242', '/cheatsheet'];
-		if (logIfFrom.includes(location)) {
-			logIp(req);
-		}
-	}
-	if (process.env.NODE_ENV === 'dev') {
-		res.header('Access-Control-Allow-Origin', "*");
-	}
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, application/json; charset=utf-8, Authorization, Content-Length, X-Requested-With, application/x-www-form-urlencoded, multipart/form-data');
-	if ('OPTIONS' == req.method) {
-		res.sendStatus(200);
-	} else {
-		next();
-	}
-}
-
-// username:user
-// password:private
-
-const basic				= auth.basic({
-	realm: "Nope It's Private",
-	file: __dirname + "/users.htpasswd"
-});
-
-mongoose.Promise = global.Promise;
-// Connect
-mongoose.connect('mongodb://localhost:27017/userLinks',{
-	useMongoClient: true
-});
-mongoose.connection.once('open', () => {
-// Connected !
-});
 //use sessions for tracking logins
 app.use(session({
     secret: 'work hard',
@@ -106,10 +29,10 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     },
     store: new MongoStore({
-        mongooseConnection: mongoose.connection
+        mongooseConnection: env.connection('userLinks')
     })
 }));
-app.use(allowXSS);
+app.use(env.allowXSS);
 app.use(express.static(path.join(__dirname, '..', 'Public')));
 app.set('views', path.join(__dirname, '..', 'Public', 'snippets'));
 app.set('view engine', 'jade');
@@ -121,10 +44,10 @@ app.use('/cheatsheet', mds.middleware({
         res.render('markdown', { title: title, content: markdownFile.parseContent() });
     }
 }));
-app.use('/4242', auth.connect(basic), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
+app.use('/4242', env.connectBasic(), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
 app.use('/up/*', function (req, res, next) {
 	if (!req.session.userId) {
-		logIp(req, 'what are you looking for ?');
+		env.logIp(req, 'what are you looking for ?');
 		var err = new Error('Nope your are absolutely not allowed to browse this folder gtfo m8');
 		err.status = 401;
 		return next(err);
