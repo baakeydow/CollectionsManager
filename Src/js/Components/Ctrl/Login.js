@@ -29,10 +29,10 @@ class Login extends React.Component {
   }
 
   handleSubmit(e) {
-      if (this.state.form.username && this.state.form.passwd) {
-          this.props.dispatch(this.props.getCred(this.state.form));
-      }
-      e.preventDefault();
+    if (this.state.form.username && this.state.form.passwd) {
+      this.props.dispatch(this.props.getCred(this.state.form));
+    }
+    e.preventDefault();
   }
 
   componentWillMount() {
@@ -46,42 +46,42 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      this.setState({
-          wording: nextProps.wording ? nextProps.wording : this.props.wording,
-          user: nextProps.user ? nextProps.user : this.props.user
-      });
+    this.setState({
+      wording: nextProps.wording ? nextProps.wording : this.props.wording,
+      user: nextProps.user ? nextProps.user : this.props.user
+    });
   }
 
   render() {
     if (this.state.user && this.state.user.userId) {
-        return (
-            <Redirect to={{
-                pathname: '/',
-            }}/>
-        )
+      return (
+        <Redirect to={{
+          pathname: '/',
+        }} />
+      )
     }
     return (
-        <div className="container">
-                <div className="Content title">
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="row">
-                            <div className="form-group col-sm-6">
-                                <label>username</label>
-                                <input value={this.state.form.username} onChange={this.handleChange} name="username" type="text" className="form-control" placeholder="user"/>
-                            </div>
-                            <div className="form-group col-sm-6">
-                                <label>passwd</label>
-                                <input value={this.state.form.passwd} onChange={this.handleChange} name="passwd" type="password" className="form-control" placeholder="****************"/>
-                            </div>
-                        </div>
-                        <div className="ContentCenter" style={{marginBottom:'20px'}}>
-                            <button type="submit" className="btn btn-primary">
-                                {this.state.wording.cta}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+      <div className="container">
+        <div className="Content title">
+          <form onSubmit={this.handleSubmit}>
+            <div className="row">
+              <div className="form-group col-sm-6">
+                <label>username</label>
+                <input value={this.state.form.username} onChange={this.handleChange} name="username" type="text" className="form-control" placeholder="user" />
+              </div>
+              <div className="form-group col-sm-6">
+                <label>passwd</label>
+                <input value={this.state.form.passwd} onChange={this.handleChange} name="passwd" type="password" className="form-control" placeholder="****************" />
+              </div>
+            </div>
+            <div className="ContentCenter" style={{ marginBottom: '20px' }}>
+              <button type="submit" className="btn btn-primary">
+                {this.state.wording.cta}
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     );
   }
 }

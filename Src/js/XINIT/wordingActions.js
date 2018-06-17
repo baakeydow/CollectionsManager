@@ -14,9 +14,9 @@ const Hello = {
   contact: {
     title: "Contact Us",
     form: {
-        name: "Name *",
-        email: "Email *",
-        message: "Message *"
+      name: "Name *",
+      email: "Email *",
+      message: "Message *"
     },
     button: "Send"
   }
@@ -37,9 +37,9 @@ const Bonjour = {
   contact: {
     title: "Contactez Nous",
     form: {
-        name: "Nom *",
-        email: "Email *",
-        message: "Message *"
+      name: "Nom *",
+      email: "Email *",
+      message: "Message *"
     },
     button: "Envoyer"
   }
@@ -50,14 +50,18 @@ export function getLg(lang) {
   console.log(lang);
   console.log('=============');
   if (lang === 'EN') {
-    return function(dispatch) {
-      dispatch({type: "GETENGLISH",
-                payload: Hello});
+    return function (dispatch) {
+      dispatch({
+        type: "GETENGLISH",
+        payload: Hello
+      });
     }
   } else {
-    return function(dispatch) {
-      dispatch({type: "GETFRENCH",
-                payload: Bonjour});
+    return function (dispatch) {
+      dispatch({
+        type: "GETFRENCH",
+        payload: Bonjour
+      });
     }
   }
 

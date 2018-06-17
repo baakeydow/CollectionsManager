@@ -9,11 +9,11 @@ export default class Layout extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({lang: this.props.lang, onchange: this.props.onChange, wording: this.props.wording});
+    this.setState({ lang: this.props.lang, onchange: this.props.onChange, wording: this.props.wording });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({wording: this.props.wording});
+    this.setState({ wording: this.props.wording });
   }
 
   componentDidMount() {
@@ -32,7 +32,7 @@ export default class Layout extends React.Component {
     };
     return (
       <div style={containerStyle}>
-        <Nav location={location} changeLang={this.state.onchange} navProps={NavProps}/>
+        <Nav location={location} changeLang={this.state.onchange} navProps={NavProps} />
       </div>
     );
   }

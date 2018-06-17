@@ -24,12 +24,12 @@ export default class ArticlesCtrl extends React.Component {
 
   render() {
     return (
-        <div className="container">
-            <div className="Content title">
-                <h3>{this.props.wording.title}</h3>
-                <GetNetvibesArticles/>
-            </div>
+      <div className="container">
+        <div className="Content title">
+          <h3>{this.props.wording.title}</h3>
+          <GetNetvibesArticles />
         </div>
+      </div>
     );
   }
 }

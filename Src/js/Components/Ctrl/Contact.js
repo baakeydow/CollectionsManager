@@ -30,24 +30,23 @@ export default class ContactCtrl extends React.Component {
   }
 
   handleSubmit() {
-      if (this.state.form.name &&
-          this.state.form.email &&
-          this.state.form.message) {
-          axios({
-            method: 'post',
-            url: process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/contact' : '/contact',
-            data: {
-              name: sanitizeHtml(this.state.form.name),
-              email: sanitizeHtml(this.state.form.email),
-              message: sanitizeHtml(this.state.form.message)
-            }
-          }).then(function (response) {
-            console.log(response);
-          }.bind(this))
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
+    if (this.state.form.name &&
+      this.state.form.email &&
+      this.state.form.message) {
+      axios({
+        method: 'post',
+        url: process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/contact' : '/contact',
+        data: {
+          name: sanitizeHtml(this.state.form.name),
+          email: sanitizeHtml(this.state.form.email),
+          message: sanitizeHtml(this.state.form.message)
+        }
+      }).then(function (response) {
+        console.log(response);
+      }.bind(this)).catch(function (error) {
+        console.log(error);
+      });
+    }
   }
 
   componentWillMount() {
@@ -70,35 +69,35 @@ export default class ContactCtrl extends React.Component {
   render() {
     return (
       <div className="container">
-          <div className="Content title">
-              <h3>{this.state.wording.title}</h3>
-              <div style={{marginTop:'40px'}} className="row">
-                  <div className="col-md-4">
-                    <p>Do you have any suggestions ? please share ! I'll answer you ;)</p>
+        <div className="Content title">
+          <h3>{this.state.wording.title}</h3>
+          <div style={{ marginTop: '40px' }} className="row">
+            <div className="col-md-4">
+              <p>Do you have any suggestions ? please share ! I'll answer you ;)</p>
+            </div>
+            <div className="col-xs-12 col-md-8 formContact">
+              <form onSubmit={this.handleSubmit}>
+                <div className="row">
+                  <div className="form-group col-xs-12 col-sm-6">
+                    <label>{this.state.wording.form.name}</label>
+                    <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="Dr. Huey P Newton" />
                   </div>
-                  <div className="col-xs-12 col-md-8 formContact">
-                      <form onSubmit={this.handleSubmit}>
-                          <div className="row">
-                              <div className="form-group col-xs-12 col-sm-6">
-                                  <label>{this.state.wording.form.name}</label>
-                                  <input value={this.state.form.name} onChange={this.handleChange} name="name" type="text" className="form-control" placeholder="Dr. Huey P Newton"/>
-                              </div>
-                              <div className="form-group col-xs-12 col-sm-6">
-                                  <label>{this.state.wording.form.email}</label>
-                                  <input value={this.state.form.email} onChange={this.handleChange} name="email" type="email" className="form-control" placeholder="hueypnewton@panther.com"/>
-                              </div>
-                              <div className="form-group col-xs-12">
-                                  <label>{this.state.wording.form.message}</label>
-                                  <textarea value={this.state.form.message} onChange={this.handleChange} name="message" style={{height: '100px'}} type="text" className="form-control" placeholder="Message"/>
-                              </div>
-                          </div>
-                          <div className="ContentRight">
-                            <button type="submit" className="btn btn-primary">{this.state.wording.button}</button>
-                          </div>
-                      </form>
+                  <div className="form-group col-xs-12 col-sm-6">
+                    <label>{this.state.wording.form.email}</label>
+                    <input value={this.state.form.email} onChange={this.handleChange} name="email" type="email" className="form-control" placeholder="hueypnewton@panther.com" />
                   </div>
-              </div>
+                  <div className="form-group col-xs-12">
+                    <label>{this.state.wording.form.message}</label>
+                    <textarea value={this.state.form.message} onChange={this.handleChange} name="message" style={{ height: '100px' }} type="text" className="form-control" placeholder="Message" />
+                  </div>
+                </div>
+                <div className="ContentRight">
+                  <button type="submit" className="btn btn-primary">{this.state.wording.button}</button>
+                </div>
+              </form>
+            </div>
           </div>
+        </div>
       </div>
     );
   }

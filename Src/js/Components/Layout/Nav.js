@@ -39,15 +39,15 @@ export default class Nav extends React.Component {
     const imagesClass = location.pathname.match(/^\/media/) ? "active" : "";
     const navClass = collapsed ? "collapse" : "";
     const navStyle = {
-        backgroundColor: "#353536"
+      backgroundColor: "#353536"
     };
     const spanStyle = {
-        display: "block",
-        height: "6px"
+      display: "block",
+      height: "6px"
     };
     const buttonStyle = {
-        margin: "0 50px 0 20px",
-        color: "white"
+      margin: "0 50px 0 20px",
+      color: "white"
     };
     let wording = this.state.wording;
     let lang = this.props.navProps.lang === 'EN' ? "FR" : "EN";

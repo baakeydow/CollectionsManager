@@ -52,7 +52,7 @@ export default class FileInput extends Component {
           name={`this.props.name + '_filename'`}
           value={this.state.value}
           className={this.props.className}
-          onChange={() => {}}
+          onChange={() => { }}
           placeholder={this.props.placeholder}
           disabled={this.props.disabled}
           style={this.state.styles.text} />
