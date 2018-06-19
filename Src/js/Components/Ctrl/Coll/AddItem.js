@@ -51,7 +51,7 @@ class AddItem extends React.Component {
   }
 
   showEditMode() {
-    var divs = document.querySelectorAll('div.ContentLeft.col-sm-6.itemAction')
+    var divs = document.querySelectorAll('div.ContentLeft.col-sm-12.itemAction')
     if (divs) {
       divs.forEach((div) => {
         div.style.display = 'flex'

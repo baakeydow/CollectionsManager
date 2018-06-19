@@ -17,6 +17,7 @@
 .form-control {
     background-color: transparent !important;
     border: 1px ridge #683c15 !important;
+    min-width: 142px;
 }
 .centerPunchLine {
     margin: 40px 0;
@@ -213,10 +214,6 @@ div#app {
 /*#             collection and items*/
 /*#####*/
 
-.ListAllCollections .singleColl .toolbar.ContentCenter .btn-danger {
-    display: none;
-}
-
 .MediaPlayer {
     display: flex;
     flex-direction: column;
@@ -256,15 +253,74 @@ div#app {
     padding-right: 20px;
     color: #801010;
 }
+.Dashboard {
+  flex: 1;
+  display: flex;
+  margin-bottom: 42px;
+}
+@media screen and (max-width: 60em) {
+  .Dashboard {
+    flex-direction: column;
+  }
+  .Dashboard-items {
+    padding-left: 0px !important;
+    border-top-style:  none !important;
+  }
+  .Dashboard-coll {
+    padding-top: 100px !important;
+    height: 400px !important;
+    min-height: 260px !important;
+    min-width: 65% !important;
+  }
+  .ListAllCollections {
+    display: block !important;
+  }
+  .Content {
+    margin: 40px 15% 0 15%;
+  }
+}
+.Dashboard-coll {
+  width: 200px;
+  min-width: 200px;
+  height: 442px;
+  min-height: 442px;
+  overflow: auto;
+  padding: 10px;
+  border-style: ridge;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 .ListAllCollections {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
+  height: 442px;
+  min-height: 442px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.Dashboard-items {
+  padding: 10px;
+  height: 442px;
+  min-height: 442px;
+  min-width: 200px;
+  width: 65%;
+  overflow: auto;
+  border-style: ridge;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.ListAllCollections .singleColl .toolbar.ContentCenter .btn-danger {
+  display: none;
 }
 .singleColl {
-    border-style: ridge;
-    padding: 10px;
-    min-width: 140px;
+  padding: 10px 0;
+  min-width: 140px;
+}
+.singleColl .ContentLeft button {
+  width: 100%;
 }
 .toolbar {
     color: black;
@@ -283,11 +339,11 @@ div#app {
     padding: 0px;
     font-size: 8px;
 }
-div.ContentLeft.col-sm-6.itemAction {
+div.ContentLeft.col-sm-12.itemAction {
     display: none;
     width: 100%;
 }
-div.ContentRight.col-sm-6.itemList {
+div.ContentRight.col-sm-12.itemList {
     display:table;
 }
 .ContentLeft.col-xs-12.col-sm-6 {

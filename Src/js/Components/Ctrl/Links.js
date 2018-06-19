@@ -1,7 +1,7 @@
 import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
-import { withRouter, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import axios from "axios";
 import InputFile from "../Utils/FileInput";
 import AddOneColl from "./Coll/AddOneColl";
@@ -43,19 +43,17 @@ class Linksctrl extends React.Component {
       axios({
         method: 'get',
         url: url
+      }).then((response) => {
+        console.log("user logged out");
+        window.location.reload();
+      }).catch((err) => {
+        console.log('ERROR! : ', err);
       })
-        .then((response) => {
-          console.log("user logged out");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log('ERROR! : ', err);
-        })
     }
   }
 
   handleSubmit(e) {
-    const file = document.getElementById('file').files[0] || e.target.files[0];
+    const file = e.target.files[0];
     var bodyFormData = new FormData();
     bodyFormData.set('file', file);
     axios({
@@ -82,8 +80,7 @@ class Linksctrl extends React.Component {
   }
 
   render() {
-    var { user, collections } = this.state;
-    let btnState = user.userId ? "Log out" : "Log in";
+    var { user } = this.state;
     if (user.userId || process.env.NODE_ENV === 'dev') {
       return (
         <div className="container">
@@ -92,32 +89,32 @@ class Linksctrl extends React.Component {
               {this.state.wording.title}
             </h3>
             <div class="ContentLeft">
-              <form className="addOneForm">
-                <label className="btn btn-success" for="file">
-                  Add File !
-                  <input onChange={this.handleSubmit} className="hidden" type="file" id="file" name="file" />
-                </label>
-              </form>
+              <AddOneColl addOneColl={this.addOneColl} />
             </div>
-            <div class="addOneForm">
-              <InputFile className="btn btn-success" name="fileInput" onChange={this.handleSubmit} />
+            <div class="Dashboard">
+              <div class="Dashboard-coll">
+                <ListAllColl
+                  addOneColl={this.props.addOneColl}
+                  addItemToColl={this.props.addItemToColl}
+                  selectOneColl={this.props.selectOneColl}
+                  dropOneColl={this.props.dropOneColl}
+                />
+              </div>
+              <div class="Dashboard-items">
+                <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem} />
+              </div>
             </div>
             <div class="ContentLeft">
-              <AddOneColl addOneColl={this.addOneColl} />
-              <btn style={{ width: '200px', height: "50px" }}>
-                <NavLink style={{ float: 'right' }} to="/"><button onClick={this.logOut}>{btnState}</button></NavLink>
+              <form className="addOneForm">
+                <div class="btn btn-success">
+                  <InputFile name="fileInput" onChange={this.handleSubmit} />
+                </div>
+              </form>
+            </div>
+            <div className="addOneForm">
+              <btn style={{ height: "50px" }}>
+                <NavLink style={{ float: 'left' }} to="/"><button class="btn btn-success" onClick={this.logOut}>Log out</button></NavLink>
               </btn>
-            </div>
-            <div class="ContentCenter">
-              <ListAllColl
-                addOneColl={this.props.addOneColl}
-                addItemToColl={this.props.addItemToColl}
-                selectOneColl={this.props.selectOneColl}
-                dropOneColl={this.props.dropOneColl}
-              />
-            </div>
-            <div class="ContentLeft" style={{ marginTop: '40px' }}>
-              <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem} />
             </div>
           </div>
         </div>

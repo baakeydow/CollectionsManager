@@ -1,72 +1,64 @@
 import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
-import AddItem from "./AddItem";
+import Coll from "./Coll";
 
 class AllColl extends React.Component {
-
-  togglEditMode(collName, e) {
-    var el = document.getElementsByClassName(collName)[0];
-    var collections = document.getElementsByClassName("collection-detail");
-    if (el.style.display === "block") {
-      el.style.display = "none";
-      Object.keys(collections).map((i) => {
-        collections[i].previousSibling.style.display = 'flex';
-        collections[i].parentNode.style.display = "block";
-      })
-    } else {
-      this.props.selectOneColl(collName);
-      this.refs[collName].style.display = "none";
-      Object.keys(collections).map((i) => {
-        collections[i].style.display = 'none';
-        collections[i].previousSibling.style.display = 'flex';
-        collections[i].parentNode.style.borderStyle = 'ridge';
-        collections[i].parentNode.style.display = "none";
-      })
-      el.parentNode.style.display = "block";
-      el.parentNode.style.borderStyle = "solid";
-      el.style.display = 'block';
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: props.collections,
+      value: ''
     }
-    e.preventDefault();
   }
 
-  showdeleteBtn(id, e) {
-    var btn = document.getElementById(id);
-    if (btn) {
-      if (btn.style.display === 'none') {
-        btn.style.display = 'flex';
-        btn.style.padding = '1px';
-      } else {
-        btn.style.display = 'none';
-      }
-    }
-    e.preventDefault();
+  componentDidMount() {
+    this.nameInput.focus();
+  }
+
+  filterList(event) {
+    var updatedList = this.props.collections;
+    var value = event.target.value;
+    updatedList = updatedList.filter((item) => {
+      return item.name.toLowerCase().search(
+        value.toLowerCase()) !== -1;
+    });
+    this.setState({
+      value,
+      items: updatedList
+    });
   }
 
   render() {
-    var { collections } = this.props;
-
-    var collectionsList = collections.map((coll, i) =>
-      <div className="singleColl" key={i}>
-        <div ref={coll.name} className="ContentCenter">
-          <button onClick={this.togglEditMode.bind(this, coll.name)} className={"btn btn-info ContentCenter toolbar" + coll.name}>
-            {coll.name}
-          </button>
-        </div>
-        <div className={"collection-detail " + coll.name}>
-          <div className="toolbar ContentCenter">
-            <li onClick={this.showdeleteBtn.bind(this, coll.name)} className="legend">&nbsp;{coll.name}</li>
-            <button id={coll.name} className="btn btn-danger" onClick={this.props.dropOneColl.bind(this, coll.name)}><span>Drop</span></button>
-          </div>
-          <AddItem dbColl={coll.name} addOneItem={this.props.addItemToColl} />
-        </div>
-      </div>
+    var items = (this.state.items.length === 0 && !this.state.value)
+      ? this.props.collections
+      : this.state.items;
+    var collectionsList = items.map((coll, i) =>
+      <Coll
+        selectOneColl={this.props.selectOneColl}
+        dropOneColl={this.props.dropOneColl}
+        addItemToColl={this.props.addItemToColl}
+        coll={coll}
+        key={i}
+      />
     );
     if (!collectionsList.length) {
       collectionsList = <p>No Collections !</p>
     }
     return (
       <div className="ListAllCollections">
+        <div className="singleColl">
+          <fieldset>
+            <input
+              value={this.state.value}
+              type="text"
+              className="form-control form-control-lg"
+              placeholder="Search"
+              onChange={this.filterList.bind(this)}
+              ref={(input) => { this.nameInput = input; }}
+            />
+          </fieldset>
+        </div>
         {collectionsList}
       </div>
     );

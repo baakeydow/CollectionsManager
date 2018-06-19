@@ -4,7 +4,6 @@ export function fetchAllCollections() {
   return function (dispatch) {
     dispatch({ type: "FETCH_COLLECTIONS" });
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/list/?dev=true' : '/db/list';
-
     axios({
       method: 'get',
       url: url
@@ -40,19 +39,18 @@ export function addCollection(coll) {
   return function (dispatch) {
     dispatch({ type: "ADD_ONECOLL" });
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/db/adddbcoll/' : '/db/adddbcoll/';
-    axios(
-      {
-        method: 'POST',
-        url: url,
-        data: {
-          coll: coll
-        }
-      }).then((response) => {
-        dispatch({ type: "ADD_ONECOLL_FULFILLED", payload: response.data })
-      }).catch((err) => {
-        console.log('ERROR! : ', err);
-        dispatch({ type: "ADD_ONECOLL_REJECTED", payload: err })
-      })
+    axios({
+      method: 'POST',
+      url: url,
+      data: {
+        coll: coll
+      }
+    }).then((response) => {
+      dispatch({ type: "ADD_ONECOLL_FULFILLED", payload: response.data })
+    }).catch((err) => {
+      console.log('ERROR! : ', err);
+      dispatch({ type: "ADD_ONECOLL_REJECTED", payload: err })
+    })
   }
 }
 

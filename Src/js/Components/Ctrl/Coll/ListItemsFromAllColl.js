@@ -2,6 +2,7 @@ import React from "react";
 import { compose } from 'redux';
 import { connect } from "react-redux";
 import axios from "axios";
+import { shuffle } from "../../Utils/Custom";
 
 class ListAll extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class ListAll extends React.Component {
       url: url
     }).then((response) => {
       this.setState({
-        collections: response.data
+        collections: shuffle(response.data)
       });
     }).catch((err) => {
       console.log('ERROR! : ', err);
@@ -54,7 +55,7 @@ class ListAll extends React.Component {
       var allItemsList = allItems.map((item) =>
         <div className="ContentLeft item list" key={item._id}>
           {displayTitle(item.belongsTo)}
-          <div className="ContentRight col-sm-6 itemList">
+          <div className="ContentRight col-sm-12 itemList">
             <li>&nbsp;&nbsp;<a href={item.link.url} target="_blank">{item.link.desc}</a></li>
           </div>
         </div>

@@ -78,7 +78,7 @@ class GetInstagramPost extends React.Component {
       })
     }
     if (!posts.length) {
-      posts = <p>You are not allowed to see this you need to find how to log in</p>
+      posts = <p>You are not allowed to see this contact me for access</p>
     }
     return (
       <div className="mappedLinksCollWithImages">

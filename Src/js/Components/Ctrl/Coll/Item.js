@@ -42,7 +42,7 @@ class Item extends React.Component {
       this.state.item.url = "";
       this.state.item.belongsTo = "";
     }
-    var divs = document.querySelectorAll('div.ContentLeft.col-sm-6.itemAction')
+    var divs = document.querySelectorAll('div.ContentLeft.col-sm-12.itemAction')
     if (divs) {
       divs.forEach((div) => {
         div.style.display = 'none'
@@ -71,14 +71,14 @@ class Item extends React.Component {
     var coll = this.state.item.belongsTo ? this.state.item.coll : item.belongsTo;
     return (
       <div className="ContentLeft item list" key={item._id}>
-        <div className="ContentLeft col-sm-6 itemAction">
+        <div className="ContentLeft col-sm-12 itemAction">
           <button onClick={this.props.delItem.bind(this, item)} className="ContentCenter btnMode">X</button>
           <input value={desc} onChange={this.handleChange.bind(this)} name="desc" type="text" className="form-control" placeholder="newValue" />
           <input value={url} onChange={this.handleChange.bind(this)} name="url" type="text" className="form-control" placeholder="newValue" />
           <input value={coll} onChange={this.handleChange.bind(this)} name="coll" type="text" className="form-control" placeholder="changeCollection" />
           <button onClick={this.updateItem.bind(this, item)} className="ContentCenter btnMode">U</button>
         </div>
-        <div className="ContentRight col-sm-6 itemList">
+        <div className="ContentRight col-sm-12 itemList">
           <li>&nbsp;&nbsp;<a href={item.link.url} target="_blank">{item.link.desc}</a></li>
         </div>
       </div>
