@@ -58,7 +58,6 @@ var FindUser = (req, res, next) => {
                 err.status = 400;
                 return next(err);
             } else {
-                console.log('userFetched: ', user);
                 return user;
             }
         }).catch((error) => {

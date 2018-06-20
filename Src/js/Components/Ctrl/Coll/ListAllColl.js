@@ -12,10 +12,6 @@ class AllColl extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.nameInput.focus();
-  }
-
   filterList(event) {
     var updatedList = this.props.collections;
     var value = event.target.value;
@@ -55,7 +51,6 @@ class AllColl extends React.Component {
               className="form-control form-control-lg"
               placeholder="Search"
               onChange={this.filterList.bind(this)}
-              ref={(input) => { this.nameInput = input; }}
             />
           </fieldset>
         </div>

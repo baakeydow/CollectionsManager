@@ -18,6 +18,10 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.nameInput.focus();
+  }
+
   handleChange(event) {
     this.setState({
       form: {
@@ -67,7 +71,7 @@ class Login extends React.Component {
             <div className="row">
               <div className="form-group col-sm-6">
                 <label>username</label>
-                <input value={this.state.form.username} onChange={this.handleChange} name="username" type="text" className="form-control" placeholder="user" />
+                <input ref={(input) => { this.nameInput = input; }} value={this.state.form.username} onChange={this.handleChange} name="username" type="password" className="form-control" placeholder="user" />
               </div>
               <div className="form-group col-sm-6">
                 <label>passwd</label>

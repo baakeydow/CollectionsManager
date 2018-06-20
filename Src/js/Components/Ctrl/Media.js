@@ -29,7 +29,7 @@ export default class MediaCtrl extends React.Component {
     return (
       <div className="container">
         <div className="Content title">
-          <h2>{this.props.wording.title}</h2>
+          <h3>{this.props.wording.title}</h3>
           <MediaPlayer />
           <h3>Images from Articles</h3>
           <ImagesNetvibesLinks />

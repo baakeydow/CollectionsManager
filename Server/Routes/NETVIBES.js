@@ -1,7 +1,7 @@
-const express       = require('express');
-const mongoose		= require('mongoose');
-const connection	= mongoose.connect('mongodb://localhost:27017/userLinks',{
-	useMongoClient: true
+const express = require('express');
+const mongoose = require('mongoose');
+const connection = mongoose.connect('mongodb://localhost:27017/userLinks', {
+  useMongoClient: true
 });
 
 const router = express.Router();
@@ -10,200 +10,201 @@ var DB = {};
 
 mongoose.Promise = global.Promise;
 mongoose.connection.once('open', () => {
-	DB = mongoose.connection.db;
+  DB = mongoose.connection.db;
 });
 
 var Schema = mongoose.Schema;
 var postSchema = new Schema({
-	article: {
-		type: [],
-		unique: true,
-		required: true
-	}
+  article: {
+    type: [],
+    unique: true,
+    required: true
+  }
 });
 
 var protectRoute = (next) => {
-	var err = new Error('403 you need to authenticate yourself');
-	err.status = 403;
-	return next(err);
+  var err = new Error('403 you need to authenticate yourself');
+  err.status = 403;
+  return next(err);
 }
 
 // Insert
 
 router.route('/img').post((req, res, next) => {
-    if (req.body[0] && req.body[0].value && req.body[0].value.enclosures) {
-        var coll = DB.collection("netpost");
-        coll.insert(req.body[0].value.enclosures, (err, doc) => {
-            if (err) return next(err);
-            res.json('thx');
-        });
-    }
+  if (req.body[0] && req.body[0].value && req.body[0].value.enclosures) {
+    var coll = DB.collection("netpost");
+    coll.insert(req.body[0].value.enclosures, (err, doc) => {
+      if (err) return next(err);
+      res.json('thx');
+    });
+  }
 });
 
 router.route('/dropboximages').post((req, res, next) => {
-    if (req.body[0] && req.body[0].value && req.body[0].value.share) {
-        var coll = DB.collection("dropboxImages");
-        coll.insert(req.body[0].value, (err, doc) => {
-            if (err) return next(err);
-            res.json('thx');
-        });
-    }
+  if (req.body[0] && req.body[0].value && req.body[0].value.share) {
+    var coll = DB.collection("dropboxImages");
+    coll.insert(req.body[0].value, (err, doc) => {
+      if (err) return next(err);
+      res.json('thx');
+    });
+  }
 });
 
 router.route('/articles').post((req, res, next) => {
-    if (req.body[0] && req.body[0].type === 'article') {
-        var coll = DB.collection("netvibesArticles");
-		console.log('here is my article:', req.body[0].value);
-        coll.insert(req.body[0].value, (err, doc) => {
-            if (err) return next(err);
-            res.json('thx');
-        });
-    }
+  if (req.body[0] && req.body[0].type === 'article') {
+    var coll = DB.collection("netvibesArticles");
+    console.log('here is my article:', req.body[0].value.title);
+    coll.insert(req.body[0].value, (err, doc) => {
+      if (err) return next(err);
+      res.json('thx');
+    });
+  }
 });
 
 router.route('/instagram').post((req, res, next) => {
-	if (req.body[0] && req.body[0].type === 'instagram-like') {
-        var coll = DB.collection("InstagramPosts");
-		console.log('here is my instagram post:', req.body[0].value);
-        coll.insert(req.body[0].value, (err, doc) => {
-            if (err) return next(err);
-            res.json('thx');
-        });
-    }
+  if (req.body[0] && req.body[0].type === 'instagram-like') {
+    var coll = DB.collection("InstagramPosts");
+    console.log('here is my instagram post:', req.body[0].value);
+    coll.insert(req.body[0].value, (err, doc) => {
+      if (err) return next(err);
+      res.json('thx');
+    });
+  }
 });
 
 // Delete
 
 router.route('/delimg').post((req, res, next) => {
-	if (req.body && req.body.id && req.body.userId) {
-		return new Promise((resolve, reject) => {
-			var ModelItem = mongoose.model('netpost', postSchema.set('collection', 'netpost'));
-			var coll = DB.collection('netpost');
-			ModelItem.remove({ _id: req.body.id }, function (error) {
-				if (error) return next(reject(error));
-				coll.find().sort({ $natural: -1 }).sort({ $natural: -1 }).toArray((err, doc) => {
-					if (err) return next(reject(err));
-					console.log('Img deleted');
-					resolve(res.json(doc));
-				});
-			});
-		});
-	}
-	return protectRoute(next);
+  if (req.body && req.body.id && req.body.userId) {
+    return new Promise((resolve, reject) => {
+      var ModelItem = mongoose.model('netpost', postSchema.set('collection', 'netpost'));
+      var coll = DB.collection('netpost');
+      ModelItem.remove({ _id: req.body.id }, function (error) {
+        if (error) return next(reject(error));
+        coll.find().sort({ $natural: -1 }).sort({ $natural: -1 }).toArray((err, doc) => {
+          if (err) return next(reject(err));
+          console.log('Img deleted');
+          resolve(res.json(doc));
+        });
+      });
+    });
+  }
+  return protectRoute(next);
 });
 
 router.route('/deleteArticle').post((req, res, next) => {
-    if (req.body && req.body.id && req.body.userId) {
-		return new Promise((resolve, reject) => {
-			var ModelItem = mongoose.model('netvibesArticles', postSchema.set('collection', 'netvibesArticles'));
-			var coll = DB.collection('netvibesArticles');
-			ModelItem.remove({ _id: req.body.id }, function (error) {
-				if (error) return next(reject(error));
-				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-					if (err) return next(reject(err));
-					console.log('Item deleted');
-					resolve(res.json(doc));
-				});
-			});
-		});
-    }
-	return protectRoute(next);
+  if (req.body && req.body.id && req.body.userId) {
+    return new Promise((resolve, reject) => {
+      var ModelItem = mongoose.model('netvibesArticles', postSchema.set('collection', 'netvibesArticles'));
+      var coll = DB.collection('netvibesArticles');
+      ModelItem.remove({ _id: req.body.id }, function (error) {
+        if (error) return next(reject(error));
+        coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+          if (err) return next(reject(err));
+          console.log('Item deleted');
+          resolve(res.json(doc));
+        });
+      });
+    });
+  }
+  return protectRoute(next);
 });
 
 router.route('/delinstagram').post((req, res, next) => {
-	if (req.body && req.body.id && req.body.userId) {
-		return new Promise((resolve, reject) => {
-			var ModelItem = mongoose.model('InstagramPosts', postSchema.set('collection', 'InstagramPosts'));
-			var coll = DB.collection('InstagramPosts');
-			ModelItem.remove({ _id: req.body.id }, function (error) {
-				if (error) return next(reject(error));
-				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-					if (err) return next(reject(err));
-					console.log('Item deleted');
-					resolve(res.json(doc));
-				});
-			});
-		});
-	}
-	return protectRoute(next);
+  if (req.body && req.body.id && req.body.userId) {
+    return new Promise((resolve, reject) => {
+      var ModelItem = mongoose.model('InstagramPosts', postSchema.set('collection', 'InstagramPosts'));
+      var coll = DB.collection('InstagramPosts');
+      ModelItem.remove({ _id: req.body.id }, function (error) {
+        if (error) return next(reject(error));
+        coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+          if (err) return next(reject(err));
+          console.log('Item deleted');
+          resolve(res.json(doc));
+        });
+      });
+    });
+  }
+  return protectRoute(next);
 });
 
 router.route('/deldropboximage').post((req, res, next) => {
-	if (req.body && req.body.id && req.body.userId) {
-		return new Promise((resolve, reject) => {
-			var ModelItem = mongoose.model('dropboxImages', postSchema.set('collection', 'dropboxImages'));
-			var coll = DB.collection('dropboxImages');
-			ModelItem.remove({ _id: req.body.id }, function (error) {
-				if (error) return next(reject(error));
-				coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-					if (err) return next(reject(err));
-					console.log('Item deleted');
-					resolve(res.json(doc));
-				});
-			});
-		});
-	}
-	return protectRoute(next);
+  if (req.body && req.body.id && req.body.userId) {
+    return new Promise((resolve, reject) => {
+      var ModelItem = mongoose.model('dropboxImages', postSchema.set('collection', 'dropboxImages'));
+      var coll = DB.collection('dropboxImages');
+      ModelItem.remove({ _id: req.body.id }, function (error) {
+        if (error) return next(reject(error));
+        coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+          if (err) return next(reject(err));
+          console.log('Item deleted');
+          resolve(res.json(doc));
+        });
+      });
+    });
+  }
+  return protectRoute(next);
 });
 
 // Find
 
 function getPage(collection, start, nb, sortQuery) {
-	return new Promise((resolve, reject) => {
-		collection.find()
-		.skip(parseInt(start))
-		.limit(parseInt(nb))
-		.sort(sortQuery)
-		.toArray((err, doc) => {
-			if (err) reject(err);
-			resolve(doc);
-		});
-	});
+  return new Promise((resolve, reject) => {
+    if (!nb || nb > 500) resolve('nope');
+    collection.find()
+      .skip(parseInt(start))
+      .limit(parseInt(nb))
+      .sort(sortQuery)
+      .toArray((err, doc) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+  });
 }
 
 router.get('/img', (req, res, next) => {
-    var coll = DB.collection("netpost");
-	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
-	.then((doc) => {
-		res.json(doc);
-	}).catch((err) => {
-		return next(err);
-	});
-});
-
-router.get('/articles', (req, res, next) => {
-    var coll = DB.collection("netvibesArticles");
-	getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
-	.then((doc) => {
-		res.json(doc);
-	}).catch((err) => {
-		return next(err);
-	});
-});
-
-router.get('/instagram', (req, res, next) => {
-	if (!req.session.userId && !req.query.dev) return protectRoute(next);
-	var coll = DB.collection("InstagramPosts");
-	getPage(coll, req.query.start, req.query.limit, { _id: -1 })
-	.then((doc) => {
-		res.json(doc);
-	}).catch((err) => {
-		return next(err);
-	});
-});
-
-router.get('/dropbox', (req, res, next) => {
-	var coll = DB.collection("dropboxImages");
-    coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-        if (err) return next(err);
-        res.json(doc);
+  var coll = DB.collection("netpost");
+  getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+    .then((doc) => {
+      res.json(doc);
+    }).catch((err) => {
+      return next(err);
     });
 });
 
+router.get('/articles', (req, res, next) => {
+  var coll = DB.collection("netvibesArticles");
+  getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
+    .then((doc) => {
+      res.json(doc);
+    }).catch((err) => {
+      return next(err);
+    });
+});
+
+router.get('/instagram', (req, res, next) => {
+  if (!req.session.userId && !req.query.dev) return protectRoute(next);
+  var coll = DB.collection("InstagramPosts");
+  getPage(coll, req.query.start, req.query.limit, { _id: -1 })
+    .then((doc) => {
+      res.json(doc);
+    }).catch((err) => {
+      return next(err);
+    });
+});
+
+router.get('/dropbox', (req, res, next) => {
+  var coll = DB.collection("dropboxImages");
+  coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
+    if (err) return next(err);
+    res.json(doc);
+  });
+});
+
 router.get('/*', (req, res, next) => {
-    var err = new Error("Trying to mess with me ?");
-    err.status = err.status || 418;
-    return next(err);
+  var err = new Error("Trying to mess with me ?");
+  err.status = err.status || 418;
+  return next(err);
 });
 
 module.exports = router;

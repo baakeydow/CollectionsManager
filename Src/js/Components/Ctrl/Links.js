@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
 import InputFile from "../Utils/FileInput";
+import SearchItems from "./Coll/SearchItems";
 import AddOneColl from "./Coll/AddOneColl";
 import ListAllColl from "./Coll/ListAllColl";
 import ListItemsFromColl from "./Coll/ListItemsFromColl";
@@ -90,6 +91,9 @@ class Linksctrl extends React.Component {
             </h3>
             <div class="ContentLeft">
               <AddOneColl addOneColl={this.addOneColl} />
+            </div>
+            <div class="ContentCenter">
+              <SearchItems />
             </div>
             <div class="Dashboard">
               <div class="Dashboard-coll">

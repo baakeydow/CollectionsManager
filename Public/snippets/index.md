@@ -51,6 +51,7 @@ FLUSH PRIVILEGES;
 SHOW GRANTS FOR 'news'@'localhost';
 mysqldump -u news -pnewspass --databases news > news.sql
 ```
+
 > ``` bash
 => mount ntfs to osx:
 brew install ntfs-3g
@@ -58,6 +59,7 @@ diskutil list // (it finds disk2s1)
 sudo mkdir /Volumes/NTFS
 sudo /usr/local/bin/ntfs-3g /dev/disk2s1 /Volumes/NTFS -olocal -oallow_other
 ```
+
 > ``` bash
 => rtfm:
 find . \( -name '*~' -o -name '#*#' \) -print -delete
@@ -67,8 +69,8 @@ find . \( -name '*.sh' \) -print | sed 's/\(.*\)\///g' | sed 's/\.sh//g'
 ifconfig | grep ether | sed 's/\(.*\)ether //g'
 ls -l | sed 'n;d'
 cat /etc/passwd | sed '/^#/d' | sed -n 'n;p' | sed 's/:\(.*\)//g' | rev | sort -r | awk 'NR >= ENVIRON["FT_LINE1"] && NR <= ENVIRON["FT_LINE2"]' | tr '\n' ' ' | sed 's/ /, /g' | sed 's/\(.*\), /\1./' | tr -d '\n'
-
 ```
+
 > ``` bash
 => misc:
 open -a atom -e file.txt
