@@ -30,41 +30,10 @@ var protectRoute = (next) => {
 
 // Insert
 
-router.route('/img').post((req, res, next) => {
-  if (req.body[0] && req.body[0].value && req.body[0].value.enclosures) {
-    var coll = DB.collection("netpost");
-    coll.insert(req.body[0].value.enclosures, (err, doc) => {
-      if (err) return next(err);
-      res.json('thx');
-    });
-  }
-});
-
-router.route('/dropboximages').post((req, res, next) => {
-  if (req.body[0] && req.body[0].value && req.body[0].value.share) {
-    var coll = DB.collection("dropboxImages");
-    coll.insert(req.body[0].value, (err, doc) => {
-      if (err) return next(err);
-      res.json('thx');
-    });
-  }
-});
-
 router.route('/articles').post((req, res, next) => {
   if (req.body[0] && req.body[0].type === 'article') {
     var coll = DB.collection("netvibesArticles");
-    console.log('here is my article:', req.body[0].value.title);
-    coll.insert(req.body[0].value, (err, doc) => {
-      if (err) return next(err);
-      res.json('thx');
-    });
-  }
-});
-
-router.route('/instagram').post((req, res, next) => {
-  if (req.body[0] && req.body[0].type === 'instagram-like') {
-    var coll = DB.collection("InstagramPosts");
-    console.log('here is my instagram post:', req.body[0].value);
+    console.log('here is a new article:', req.body[0].value.title);
     coll.insert(req.body[0].value, (err, doc) => {
       if (err) return next(err);
       res.json('thx');
@@ -74,26 +43,8 @@ router.route('/instagram').post((req, res, next) => {
 
 // Delete
 
-router.route('/delimg').post((req, res, next) => {
-  if (req.body && req.body.id && req.body.userId) {
-    return new Promise((resolve, reject) => {
-      var ModelItem = mongoose.model('netpost', postSchema.set('collection', 'netpost'));
-      var coll = DB.collection('netpost');
-      ModelItem.remove({ _id: req.body.id }, function (error) {
-        if (error) return next(reject(error));
-        coll.find().sort({ $natural: -1 }).sort({ $natural: -1 }).toArray((err, doc) => {
-          if (err) return next(reject(err));
-          console.log('Img deleted');
-          resolve(res.json(doc));
-        });
-      });
-    });
-  }
-  return protectRoute(next);
-});
-
 router.route('/deleteArticle').post((req, res, next) => {
-  if (req.body && req.body.id && req.body.userId) {
+  if (req.body && req.body.id && req.body.access) {
     return new Promise((resolve, reject) => {
       var ModelItem = mongoose.model('netvibesArticles', postSchema.set('collection', 'netvibesArticles'));
       var coll = DB.collection('netvibesArticles');
@@ -101,43 +52,7 @@ router.route('/deleteArticle').post((req, res, next) => {
         if (error) return next(reject(error));
         coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
           if (err) return next(reject(err));
-          console.log('Item deleted');
-          resolve(res.json(doc));
-        });
-      });
-    });
-  }
-  return protectRoute(next);
-});
-
-router.route('/delinstagram').post((req, res, next) => {
-  if (req.body && req.body.id && req.body.userId) {
-    return new Promise((resolve, reject) => {
-      var ModelItem = mongoose.model('InstagramPosts', postSchema.set('collection', 'InstagramPosts'));
-      var coll = DB.collection('InstagramPosts');
-      ModelItem.remove({ _id: req.body.id }, function (error) {
-        if (error) return next(reject(error));
-        coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-          if (err) return next(reject(err));
-          console.log('Item deleted');
-          resolve(res.json(doc));
-        });
-      });
-    });
-  }
-  return protectRoute(next);
-});
-
-router.route('/deldropboximage').post((req, res, next) => {
-  if (req.body && req.body.id && req.body.userId) {
-    return new Promise((resolve, reject) => {
-      var ModelItem = mongoose.model('dropboxImages', postSchema.set('collection', 'dropboxImages'));
-      var coll = DB.collection('dropboxImages');
-      ModelItem.remove({ _id: req.body.id }, function (error) {
-        if (error) return next(reject(error));
-        coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-          if (err) return next(reject(err));
-          console.log('Item deleted');
+          console.log('Article deleted');
           resolve(res.json(doc));
         });
       });
@@ -162,16 +77,6 @@ function getPage(collection, start, nb, sortQuery) {
   });
 }
 
-router.get('/img', (req, res, next) => {
-  var coll = DB.collection("netpost");
-  getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
-    .then((doc) => {
-      res.json(doc);
-    }).catch((err) => {
-      return next(err);
-    });
-});
-
 router.get('/articles', (req, res, next) => {
   var coll = DB.collection("netvibesArticles");
   getPage(coll, req.query.start, req.query.limit, { $natural: -1 })
@@ -182,25 +87,6 @@ router.get('/articles', (req, res, next) => {
     });
 });
 
-router.get('/instagram', (req, res, next) => {
-  if (!req.session.userId && !req.query.dev) return protectRoute(next);
-  var coll = DB.collection("InstagramPosts");
-  getPage(coll, req.query.start, req.query.limit, { _id: -1 })
-    .then((doc) => {
-      res.json(doc);
-    }).catch((err) => {
-      return next(err);
-    });
-});
-
-router.get('/dropbox', (req, res, next) => {
-  var coll = DB.collection("dropboxImages");
-  coll.find().sort({ $natural: -1 }).toArray((err, doc) => {
-    if (err) return next(err);
-    res.json(doc);
-  });
-});
-
 router.get('/*', (req, res, next) => {
   var err = new Error("Trying to mess with me ?");
   err.status = err.status || 418;
@@ -208,30 +94,6 @@ router.get('/*', (req, res, next) => {
 });
 
 module.exports = router;
-
-// Dropbox
-
-// { type: 'dropbox-file',
-//   value:
-//    { path: '/netvibesMedia/16nyc.jpg',
-//      size: 256737,
-//      date:
-//       { moment: '2017-11-30T13:02:16.000Z',
-//         offset: -60,
-//         timestamp: 1512046936,
-//         diffFromEpoch: false },
-//      newfile: true,
-//      type: 'application/binary; charset=utf-8',
-//      share: 'https://www.dropbox.com/s/85aop5syfw3wfyx/16nyc.jpg?dl=0',
-//      media: 'https://www.dropbox.com/s/85aop5syfw3wfyx/16nyc.jpg?dl=1' },
-//   prefix: { name: 'dropboxfile', offset: 1 } }
-
-
-// Instagram
-
-// [ { type: 'instagram-like',
-//     value: { post: [Object], liker: [Object] },
-//     prefix: { name: 'instagramlike', offset: 1 } } ]
 
 // Articles
 

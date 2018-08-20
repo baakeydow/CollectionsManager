@@ -25,7 +25,6 @@ class Linksctrl extends React.Component {
   }
 
   componentWillMount() {
-    this.props.displayAllColl();
     this.setState({
       user: this.props.user,
       wording: this.props.wording,
@@ -39,7 +38,7 @@ class Linksctrl extends React.Component {
 
   logOut() {
     if (this.props.user &&
-      this.props.user.userId) {
+      this.props.user.perm) {
       var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/out' : '/out';
       axios({
         method: 'get',
@@ -81,14 +80,29 @@ class Linksctrl extends React.Component {
   }
 
   render() {
-    var { user } = this.state;
-    if (user.userId || process.env.NODE_ENV === 'dev') {
+    var { user, collections } = this.state;
+    if ((user.perm || process.env.NODE_ENV === 'dev') && !collections.length) {
+      this.props.displayAllColl();
+    }
+    if (user.perm || process.env.NODE_ENV === 'dev') {
       return (
         <div className="container">
           <div className="Content title">
             <h3>
               {this.state.wording.title}
             </h3>
+            <div className="addOneForm">
+              <btn>
+                <NavLink style={{ float: 'left' }} to="/"><button class="btn btn-success" onClick={this.logOut}>Log out</button></NavLink>
+              </btn>
+            </div>
+            <div class="ContentLeft">
+              <form className="addOneForm">
+                <div class="btn btn-success">
+                  <InputFile name="fileInput" onChange={this.handleSubmit} />
+                </div>
+              </form>
+            </div>
             <div class="ContentLeft">
               <AddOneColl addOneColl={this.addOneColl} />
             </div>
@@ -107,18 +121,6 @@ class Linksctrl extends React.Component {
               <div class="Dashboard-items">
                 <ListItemsFromColl delItem={this.props.delItem} updateItem={this.props.updateItem} />
               </div>
-            </div>
-            <div class="ContentLeft">
-              <form className="addOneForm">
-                <div class="btn btn-success">
-                  <InputFile name="fileInput" onChange={this.handleSubmit} />
-                </div>
-              </form>
-            </div>
-            <div className="addOneForm">
-              <btn style={{ height: "50px" }}>
-                <NavLink style={{ float: 'left' }} to="/"><button class="btn btn-success" onClick={this.logOut}>Log out</button></NavLink>
-              </btn>
             </div>
           </div>
         </div>

@@ -12,7 +12,6 @@ export default class MediaPlayer extends Component {
   }
 
   getRandomVid() {
-    console.log(this.state.video);
     var url = process.env.NODE_ENV === 'dev' ? 'http://localhost:8000/files/videos' : '/files/videos';
     axios({
       method: 'get',

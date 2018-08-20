@@ -1,7 +1,7 @@
 export default function reducer(state = {
   user: {
-    userId: null,
-    data: null
+    perm: 0,
+    uid: null
   },
   fetching: false,
   fetched: false,
@@ -12,6 +12,22 @@ export default function reducer(state = {
     case "FETCH_USER": {
       return { ...state, fetching: true }
     }
+    case "CREATE_USER_REJECTED": {
+      return { ...state, fetching: false, error: action.payload }
+    }
+    case "CREATE_USER_FULFILLED": {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        user: {
+          email: action.payload.email,
+          username: action.payload.username,
+          perm: action.payload.perm,
+          uid: action.payload._id
+        }
+      }
+    }
     case "FETCH_USER_REJECTED": {
       return { ...state, fetching: false, error: action.payload }
     }
@@ -20,7 +36,12 @@ export default function reducer(state = {
         ...state,
         fetching: false,
         fetched: true,
-        user: action.payload,
+        user: {
+          email: action.payload.email,
+          username: action.payload.username,
+          perm: action.payload.perm,
+          uid: action.payload._id
+        }
       }
     }
     case "SET_USER": {
@@ -30,16 +51,14 @@ export default function reducer(state = {
       }
     }
     case "SET_USER_DATA": {
-      const data = {
-        email: action.payload.email,
-        username: action.payload.username
-      }
       return {
         ...state,
         user: {
-          userId: action.payload._id,
-          data: data
-        },
+          email: action.payload.email,
+          username: action.payload.username,
+          perm: action.payload.perm,
+          uid: action.payload._id
+        }
       }
     }
     default:

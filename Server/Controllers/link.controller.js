@@ -44,7 +44,7 @@ var ListAllItemsFromAllColl = (req, res, next) => {
       var collections = removeColl(doc);
       var promises = [];
       collections.forEach((collection) => {
-        if (req.session.userId) {
+        if (req.session.access) {
           var coll = DB.collection(collection.name);
           promises.push(coll.find().sort({ $natural: -1 }).toArray());
         } else if (publicCollections.includes(collection.name)) {
@@ -67,7 +67,7 @@ var ListAllItemsFromAllColl = (req, res, next) => {
 // init
 var ListAllColl = (req, res, next) => {
   return new Promise((resolve, reject) => {
-    if (!req.session.userId && !req.query.dev) return protectRoute(next);
+    if (!req.session.access && !req.query.dev) return protectRoute(next);
     DB.listCollections().toArray((err, doc) => {
       if (err) return next(reject(err));
       resolve(res.json(removeColl(doc)));
@@ -88,7 +88,7 @@ var AddDbColl = (req, res, next) => {
 // Drop one !
 var DropDbColl = (req, res, next) => {
   return new Promise((resolve, reject) => {
-    if (!req.session.userId) return protectRoute(next);
+    if (!req.session.access) return protectRoute(next);
     DB.dropCollection(req.body.coll).then((waw) => {
       DB.listCollections().toArray((err, doc) => {
         if (err) return next(reject(err));
@@ -167,7 +167,7 @@ var AddItem = (req, res, next) => {
 var DelOneItem = (req, res, next) => {
   var coll = DB.collection(req.body.item.belongsTo);
   var id = req.body.item._id;
-  if (!req.session.userId) return protectRoute(next);
+  if (!req.session.access) return protectRoute(next);
   return new Promise((resolve, reject) => {
     var ModelItem = mongoose.model(req.body.item.belongsTo, itemSchema.set('collection', req.body.item.belongsTo));
 
@@ -184,7 +184,7 @@ var DelOneItem = (req, res, next) => {
 
 var UpdateItem = (req, res, next) => {
   var coll = DB.collection(req.body.item.oldCollection);
-  if (!req.session.userId) return protectRoute(next);
+  if (!req.session.access) return protectRoute(next);
   if (req.body.item.oldCollection !== req.body.item.collectionToGo) {
     var oldId = req.body.item.id;
     var ModelItem = mongoose.model(req.body.item.oldCollection, itemSchema.set('collection', req.body.item.oldCollection));

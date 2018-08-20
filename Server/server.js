@@ -20,46 +20,51 @@ var MongoStore = require('connect-mongo')(session);
 
 var app = express();
 
+const client = process.env.NODE_ENV === 'dev' ?
+  express.static(path.join(__dirname, '..', 'Public'))
+  :
+  express.static(path.join(__dirname, '..', 'Public/dist'))
+
 //use sessions for tracking logins
 app.use(session({
-    secret: 'work hard',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    },
-    store: new MongoStore({
-        mongooseConnection: env.connection('userLinks')
-    })
+  secret: 'work hard',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  },
+  store: new MongoStore({
+    mongooseConnection: env.connection('userLinks')
+  })
 }));
 app.use(env.allowXSS);
-app.use(express.static(path.join(__dirname, '..', 'Public')));
+app.use(client);
 app.set('views', path.join(__dirname, '..', 'Public', 'snippets'));
 app.set('view engine', 'jade');
 app.use('/cheatsheet', mds.middleware({
-    rootDirectory: path.join(__dirname, '..', 'Public', 'snippets'),
-    handler: (markdownFile, req, res, next) => {
-        if (req.method !== 'GET') next();
-        var title = markdownFile.meta && markdownFile.meta.title ? markdownFile.meta.title : "Welcome";
-        res.render('markdown', { title: title, content: markdownFile.parseContent() });
-    }
+  rootDirectory: path.join(__dirname, '..', 'Public', 'snippets'),
+  handler: (markdownFile, req, res, next) => {
+    if (req.method !== 'GET') next();
+    var title = markdownFile.meta && markdownFile.meta.title ? markdownFile.meta.title : "Welcome";
+    res.render('markdown', { title: title, content: markdownFile.parseContent() });
+  }
 }));
-app.use('/4242', env.connectBasic(), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), {'icons': true}))
+app.use('/4242', env.connectBasic(), express.static(path.join(__dirname, '..', 'Public', 'folder')), serveIndex(path.join(__dirname, '..', 'Public', 'folder'), { 'icons': true }))
 app.use('/up/*', function (req, res, next) {
-	if (!req.session.userId) {
-		env.logIp(req, 'what are you looking for ?');
-		var err = new Error('Nope your are absolutely not allowed to browse this folder gtfo m8');
-		err.status = 401;
-		return next(err);
-	}
-	next();
+  if (!req.session.access) {
+    env.logIp(req, 'what are you looking for ?');
+    var err = new Error('Nope your are absolutely not allowed to browse this folder gtfo m8');
+    err.status = 401;
+    return next(err);
+  }
+  next();
 });
-app.use('/up', express.static(path.join(__dirname, '..', 'Public', 'up')), serveIndex(path.join(__dirname, '..', 'Public', 'up'), {'icons': true}))
+app.use('/up', express.static(path.join(__dirname, '..', 'Public', 'up')), serveIndex(path.join(__dirname, '..', 'Public', 'up'), { 'icons': true }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
-app.disable('x-powered-by'); // handled by helmet ? hmmm... not quite the case actually
+app.disable('x-powered-by'); // handled by helmet ?
 
 app.use('/files', upload.single('file'), FILES);
 
@@ -83,9 +88,9 @@ app.get('/*', (req, res, next) => {
 // define as the last app.use callback
 app.use((err, req, res, next) => {
   if (!err.status || err.status === 500) {
-	  console.log('ALERT ALERT that\'s a 500 ==========================================');
-      console.log(err);
-	  console.log('====================================================================');
+    console.log('ALERT ALERT that\'s a 500 ==========================================');
+    console.log(err);
+    console.log('====================================================================');
   }
   res.status(err.status || 500);
   res.send(err.message);
@@ -94,5 +99,5 @@ app.use((err, req, res, next) => {
 
 // Create an HTTP service.
 http.createServer(app).listen(8000, () => {
-	  console.log('Express app listening on port 8000\n\n\n\n');
+  console.log('Express app listening on port 8000\n\n\n\n');
 });

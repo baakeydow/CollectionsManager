@@ -5,7 +5,8 @@ Server/node_modules
 node_modules
 
 # production
-Public/client.min.js
+Public/main.min.js
+Public/dist
 
 # misc
 logHistory.log

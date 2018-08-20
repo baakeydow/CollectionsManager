@@ -16,10 +16,6 @@ export default class Layout extends React.Component {
     this.setState({ wording: this.props.wording });
   }
 
-  componentDidMount() {
-    console.log('LAYOUT DID MOUNT !');
-  }
-
   render() {
     const { location } = this.props;
     let NavProps = {

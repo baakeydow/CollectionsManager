@@ -46,9 +46,6 @@ const Bonjour = {
 }
 
 export function getLg(lang) {
-  console.log('=============');
-  console.log(lang);
-  console.log('=============');
   if (lang === 'EN') {
     return function (dispatch) {
       dispatch({

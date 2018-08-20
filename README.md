@@ -9,12 +9,12 @@ See => CollectionsManager/Src/js/App.js
 
 **webpack-dev-server**
 
-`yarn && npm start`
+`yarn && yarn start`
 
 **nodejs**
 
-`cd Server && yarn && npm run dev`
+`cd Server && yarn && yarn dev`
 
 ### Run Project (Prod)
 
-`git clone https://github.com/bndao/CollectionsManager.git && cd CollectionsManager ; mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data && yarn && npm run build && cd Server && yarn && npm run prod`
+`git clone https://github.com/bndao/CollectionsManager.git && cd CollectionsManager ; mkdir -p Public/folder/website ; mkdir Public/up ; mkdir Public/videoPlaylist ; mongorestore data && yarn && yarn build && cd Server && yarn && yarn prod`

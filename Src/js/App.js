@@ -6,6 +6,7 @@ import {
   Route,
   HashRouter
 } from 'react-router-dom';
+
 import {
   fetchAllCollections,
   fetchOneCollection,
@@ -15,13 +16,13 @@ import {
   delItem,
   updateItem
 } from "./Components/Actions/collectionsActions";
-
-import { getCred, findUser } from "./Components/Actions/userActions";
-import { getLg } from "./XINIT/wordingActions";
+import { getCred, findUser, createCred } from "./Components/Actions/userActions";
+import { getLg } from "./Components/Actions/wordingActions";
 
 import Layout from "./Components/Layout/Layout";
 
 import Login from "./Components/Ctrl/Login";
+import Register from "./Components/Ctrl/Register";
 import LinksCtrl from "./Components/Ctrl/Links";
 import ArticlesCtrl from "./Components/Ctrl/Articles";
 import MediaCtrl from "./Components/Ctrl/Media";
@@ -45,7 +46,6 @@ class App extends Component {
     this.updateItem = this.updateItem.bind(this);
     this.props.dispatch(findUser());
     this.props.dispatch(getLg(this.state.lang));
-    console.log('Constructed !!!!');
   }
 
   componentWillMount() {
@@ -109,6 +109,7 @@ class App extends Component {
               updateItem={this.updateItem} />}
           />
           <Route path='/login' render={routeProps => <Login {...routeProps} wording={this.state.wording.welcome} getCred={getCred} />} />
+          <Route path='/register' render={routeProps => <Register {...routeProps} wording={this.state.wording.welcome} createCred={createCred} />} />
           <Route path='/articles' render={routeProps => <ArticlesCtrl {...routeProps} wording={this.state.wording.articles} />} />
           <Route path='/media' render={routeProps => <MediaCtrl {...routeProps} wording={this.state.wording.media} />} />
           <Route path='/contact' render={routeProps => <ContactCtrl {...routeProps} wording={this.state.wording.contact} />} />

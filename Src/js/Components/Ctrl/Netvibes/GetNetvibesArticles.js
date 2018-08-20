@@ -66,7 +66,7 @@ class GetNetvibesLinks extends React.Component {
       url: url,
       data: {
         id: id,
-        userId: this.props.user.userId
+        access: this.props.user.perm
       }
     }).then((response) => {
       this.setState({
@@ -91,7 +91,7 @@ class GetNetvibesLinks extends React.Component {
     var articles = [];
     if (items && items[0]) {
       items.map((item, i) => {
-        var delButton = (this.props.user.userId || process.env.NODE_ENV === 'dev') ?
+        var delButton = (this.props.user.perm || process.env.NODE_ENV === 'dev') ?
           <button style={{ margin: "10px" }} className="btn-danger" onClick={this.deleteArticle.bind(this, item._id)}>delete</button>
           :
           "";
